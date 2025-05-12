@@ -8,12 +8,11 @@ import { ProfileComponent } from './profile/profile.component';
 import { LoginComponent } from './login/login.component';  
 import { RegisterComponent } from './register/register.component'; 
 
-import { AuthGuard } from './auth.guard';  
+import { AuthGuard } from './auth/auth.guard';  
 import { withInterceptors } from '@angular/common/http';
-import { authInterceptor } from './auth.interceptor';
+import { authInterceptor } from './auth/auth.interceptor';
 
 import { HomeComponent } from './home/home.component';
-import { AppComponent } from './app.component'; 
 
 
 
@@ -22,7 +21,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
 
-  
+  //Geschützte Routen:
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
 ];
 

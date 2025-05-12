@@ -1,7 +1,7 @@
 // src/main.ts
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';  // Dein Haupt-Modul
+import { AppModule } from './app/app.module';  // Dein Haupt-Modul
 import * as cors from 'cors';  // Optional: Falls du das 'cors' Paket verwenden möchtest 
 
 async function bootstrap() {

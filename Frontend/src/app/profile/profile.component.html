@@ -1,4 +1,3 @@
-
 <div class="profile-header">
   <h2>Profil</h2>
 </div>
@@ -8,10 +7,10 @@
   <div *ngIf="!loading && !errorMessage">
     <h3>Willkommen, {{ user?.name }}</h3>
     <p>Email: {{ user?.email }}</p>
+    <p>Rolle: {{ user?.rolle }}</p>
     <button (click)="logout()">Logout</button>
   </div>
 </div>
 
 
 
- 
