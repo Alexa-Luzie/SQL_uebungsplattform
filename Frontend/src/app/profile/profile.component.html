@@ -1,0 +1,17 @@
+
+<div class="profile-header">
+  <h2>Profil</h2>
+</div>
+<div class="profile-content">
+  <div *ngIf="loading">Lade dein Profil...</div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div *ngIf="!loading && !errorMessage">
+    <h3>Willkommen, {{ user?.name }}</h3>
+    <p>Email: {{ user?.email }}</p>
+    <button (click)="logout()">Logout</button>
+  </div>
+</div>
+
+
+
+ 

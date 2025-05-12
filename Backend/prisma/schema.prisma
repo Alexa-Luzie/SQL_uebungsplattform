@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Rolle {                                   //enum (short for "enumeration") is a data type that defines a set of predefined, constant values.
+  STUDENT
+  TUTOR
+  ADMIN
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String                             // Achtung: Passwort wird gehashed gespeichert!
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isBlocked Boolean  @default(false)
+  rolle     Rolle    @default(STUDENT)
+}

@@ -1,0 +1,22 @@
+<div class="login-status-indicator" (click)="goToLogin()" style="cursor:pointer">
+  <ng-container *ngIf="isLoggedIn; else loggedOut">
+    <span>✅ Eingeloggt</span>
+  </ng-container>
+  <ng-template #loggedOut>
+    <span>🚫 Nicht eingeloggt</span>
+  </ng-template>
+</div>
+
+
+<!-- Globale Button-Leiste oben rechts -->
+<div class="global-btn-bar">
+  <button *ngIf="router.url !== '/'" class="home-btn-global" (click)="router.navigate(['/'])">
+    <img src="home.png" alt="home" class="home-btn-icon" />
+  </button>
+  <button *ngIf="isLoggedIn && router.url !== '/profile'" class="profile-btn" (click)="goToProfile()">Profil</button>
+  <button *ngIf="!isLoggedIn && router.url !== '/login'" class="profile-btn" (click)="goToLogin()">Login</button>
+</div>
+
+<router-outlet></router-outlet>
+
+

@@ -1,0 +1,23 @@
+<div class="register-header">
+  <h2>Registrieren</h2>
+  <button *ngIf="isLoggedIn" class="profile-btn" (click)="goToProfile()">Profil</button>
+</div>
+<form (ngSubmit)="onRegister()" #registerForm="ngForm" class="register-form">
+  <label for="name">Name</label>
+  <input id="name" name="name" type="text" [(ngModel)]="name" required />
+
+  <label for="email">E-Mail</label>
+  <input id="email" name="email" type="email" [(ngModel)]="email" required />
+
+  <label for="password">Passwort</label>
+  <input id="password" name="password" type="password" [(ngModel)]="password" required />
+
+  <button type="submit">Registrieren</button>
+</form>
+<div class="register-links">
+  <button (click)="goToLogin()" class="link-btn">Zurück zum Login</button>
+  <a href="http://localhost:4200" class="home-link">
+    <img src="home.png" alt="home" />
+    <span>home</span>
+  </a>
+</div>
