@@ -1,28 +1,26 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
-import { Routes } from '@angular/router';
+import { provideRouter, Routes } from '@angular/router';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 import { ProfileComponent } from './profile/profile.component';  
 import { LoginComponent } from './login/login.component';  
 import { RegisterComponent } from './register/register.component'; 
-
+import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './auth/auth.guard';  
-import { withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './auth/auth.interceptor';
 
-import { HomeComponent } from './home/home.component';
-
-
-
+// Aufgabenlisten-Komponente als Standalone-Import
 export const routes: Routes = [
-  { path: '', component: HomeComponent},
-  { path: 'login', component: LoginComponent},
+  { path: '', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-
-  //Geschützte Routen:
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  {
+    path: 'tasks',
+    loadComponent: () =>
+      import('./tasks-list/tasks-list.component').then(m => m.TasksListComponent)
+  }
 ];
 
 export const appConfig: ApplicationConfig = {

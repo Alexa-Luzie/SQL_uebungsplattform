@@ -1,0 +1,9 @@
+<form (ngSubmit)="submit()" *ngIf="!loading">
+  <label>Titel: <input [(ngModel)]="formTask.title" name="title" required /></label><br>
+  <label>Beschreibung: <input [(ngModel)]="formTask.description" name="description" required /></label><br>
+  <label>Datenbank: <input [(ngModel)]="formTask.database" name="database" required /></label><br>
+  <button type="submit">{{ task && task.id ? 'Speichern' : 'Erstellen' }}</button>
+  <button type="button" (click)="cancelForm()">Abbrechen</button>
+</form>
+<div *ngIf="loading">Speichere...</div>
+<div *ngIf="error">{{ error }}</div>

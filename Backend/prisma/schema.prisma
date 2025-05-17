@@ -23,3 +23,12 @@ model User {
   isBlocked Boolean  @default(false)
   rolle     Rolle    @default(STUDENT)
 }
+
+model Task {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  database    String   // Name oder ID der zugehörigen Datenbank
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
