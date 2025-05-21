@@ -44,6 +44,13 @@ let UsersService = class UsersService {
             }
         });
     }
+    async getUserRole(userId) {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            select: { rolle: true }
+        });
+        return user?.rolle || null;
+    }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([

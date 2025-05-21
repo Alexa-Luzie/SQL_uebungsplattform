@@ -11,4 +11,5 @@ export declare class UsersService {
     }): Promise<User>;
     findById(id: string): Promise<any | null>;
     findAll(): Promise<any[]>;
+    getUserRole(userId: string): Promise<string | null>;
 }
