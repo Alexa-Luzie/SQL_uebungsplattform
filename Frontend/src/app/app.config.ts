@@ -9,6 +9,7 @@ import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './auth/auth.guard';  
 import { authInterceptor } from './auth/auth.interceptor';
+import { SqlUploadComponent } from './sql-upload.component';
 
 // Aufgabenlisten-Komponente als Standalone-Import
 export const routes: Routes = [
@@ -20,7 +21,8 @@ export const routes: Routes = [
     path: 'tasks',
     loadComponent: () =>
       import('./tasks-list/tasks-list.component').then(m => m.TasksListComponent)
-  }
+  },
+  { path: 'sql-upload', component: SqlUploadComponent, canActivate: [AuthGuard] }
 ];
 
 export const appConfig: ApplicationConfig = {

@@ -1,0 +1,7 @@
+<div class="sql-upload-container">
+  <h2>SQL-Datei hochladen</h2>
+  <input type="file" accept=".sql" (change)="onFileSelected($event)" />
+  <button (click)="uploadFile()" [disabled]="!selectedFile || uploading">Hochladen</button>
+  <div *ngIf="uploading">Lade hoch...</div>
+  <div *ngIf="message">{{ message }}</div>
+</div>
