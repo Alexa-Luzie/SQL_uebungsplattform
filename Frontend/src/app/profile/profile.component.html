@@ -9,6 +9,10 @@
     <p>Email: {{ user?.email }}</p>
     <p>Rolle: {{ user?.rolle }}</p>
     <button (click)="logout()">Logout</button>
+    <button *ngIf="!loading && !errorMessage && (user?.rolle === 'admin' || user?.rolle === 'tutor')"
+            routerLink="/sql-upload" class="profile-btn">
+      SQL-Datei hochladen
+    </button>
   </div>
 </div>
 

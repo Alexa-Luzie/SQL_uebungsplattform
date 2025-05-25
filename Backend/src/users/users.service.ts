@@ -1,6 +1,6 @@
 
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service'; // dein Prisma-Dienst
+import { PrismaService } from '../prisma/prisma.service'; 
 import { User } from '@prisma/client';
 
 @Injectable()
@@ -38,5 +38,14 @@ export class UsersService {
         updatedAt: true
       }
     });
+  }
+
+  // Gibt die Rolle eines Users anhand der ID zurück
+  async getUserRole(userId: string): Promise<string | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { rolle: true }
+    });
+    return user?.rolle || null;
   }
 }

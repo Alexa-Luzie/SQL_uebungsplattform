@@ -10,7 +10,7 @@ import { AuthDataService } from './auth/auth-data.service';
   standalone: true,
   imports: [RouterOutlet, CommonModule, RouterLink, RouterLinkActive, FormsModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'angular-de-tutorial';
