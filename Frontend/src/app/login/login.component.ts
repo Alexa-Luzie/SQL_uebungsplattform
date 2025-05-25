@@ -27,17 +27,19 @@ export class LoginComponent {
   this.authService.login(loginData).subscribe({
     next: (response) => {
       localStorage.setItem('access_token', response.access_token);
+
       this.authService.getProfile().subscribe({
         next: (profile) => {
+          const role = profile.role?.toUpperCase();
+
           if (profile.isBlocked) {
-            this.router.navigate(['/blocked']).then(() => {
-              window.location.reload();
-            });
+            this.router.navigate(['/blocked']);
+          } else if (role === 'STUDENT') {
+            this.router.navigate(['/student-view']);
+          } else if (role === 'TUTOR') {
+            this.router.navigate(['/tutor-view']);
           } else {
-            
-            this.router.navigate(['/profile']).then(() => {
-              window.location.reload();
-            });
+            this.router.navigate(['/']);
           }
         }
       });

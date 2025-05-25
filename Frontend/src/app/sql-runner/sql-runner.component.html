@@ -1,0 +1,16 @@
+<p style="color:green;">TEST SQL-RUNNER VISIBLE</p>
+<h3>SQL-Abfrage ausführen</h3>
+
+<textarea [(ngModel)]="sqlQuery" rows="6" cols="80" placeholder="Geben Sie hier Ihre SQL-Abfrage ein..."></textarea>
+
+<br>
+<button (click)="ausfuehren()">Ausführen</button>
+
+<div *ngIf="result">
+  <h4>Ergebnis:</h4>
+  <pre>{{ result | json }}</pre>
+</div>
+
+<div *ngIf="error" style="color: red;">
+  {{ error }}
+</div>

@@ -13,16 +13,18 @@ import { withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './auth/auth.interceptor';
 
 import { HomeComponent } from './home/home.component';
+import { StudentViewComponent } from './pages/student-view/student-view.component';
 
 
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent},
+  { path: '', redirectTo: 'student-view', pathMatch: 'full' },  // Standardroute
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
 
   //Geschützte Routen:
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'student-view', component: StudentViewComponent, canActivate: [AuthGuard] },
 ];
 
 export const appConfig: ApplicationConfig = {

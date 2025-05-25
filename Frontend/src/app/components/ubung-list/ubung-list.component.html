@@ -1,0 +1,6 @@
+<h2>Verfügbare SQL-Übungen</h2>
+<ul>
+  <li *ngFor="let ubung of ubungen" (click)="ubungWaehlen(ubung)">
+    {{ ubung.titel }}
+  </li>
+</ul>

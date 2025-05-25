@@ -5,6 +5,9 @@ import { AppService } from './app.service';
 import { PrismaModule } from '../prisma/prisma.module';
 import { AuthModule } from '../auth/auth.module';
 import { UsersModule } from '../users/users.module';
+import { SqlRunnerModule } from '../sql-runner/sql-runner.module';
+import { DatabaseModule } from '../prisma/prisma.module'; // Importiert das DatabaseModule, um auf die Datenbank zuzugreifen
+import { UbungModule } from 'src/ubung/ubung.module';
 
 @Module({
   imports: [
@@ -14,6 +17,9 @@ import { UsersModule } from '../users/users.module';
     PrismaModule,
     AuthModule,
     UsersModule,
+    SqlRunnerModule,
+    UbungModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],  
