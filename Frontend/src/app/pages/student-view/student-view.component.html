@@ -1,4 +1,3 @@
 <h2>SQL-Übungsplattform</h2>
-<app-ubung-list (ubungAusgewaehlt)="onUbungAusgewaehlt($event)"></app-ubung-list>
-<app-ubung-detail *ngIf="ausgewaehlteUbung" [ubung]="ausgewaehlteUbung"></app-ubung-detail>
-<app-sql-runner></app-sql-runner>
+<app-tasks-list (taskSelected)="onTaskSelected($event)"></app-tasks-list>
+<app-sql-runner [task]="selectedTask"></app-sql-runner>

@@ -1,29 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';  // Importiert den PrismaService, um SQL-Abfragen auszuführen
-
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
-export class SqlRunnerService { 
-    constructor(private prisma: PrismaService) {}  // Injiziert den PrismaService
-    // Der PrismaService wird verwendet, um SQL-Abfragen auszuführen und mit der Datenbank zu kommunizieren.
-  async runQuery(query: string) {
-  const trimmed = query.trim();
-  const lower = trimmed.toLowerCase();
+export class SqlRunnerService {
+  constructor(private readonly prisma: PrismaService) {}
 
-  const forbidden = ['insert', 'update', 'delete', 'drop', 'alter', 'create', 'truncate'];
-  const containsForbidden = forbidden.some(keyword => lower.includes(keyword));
+  async validateSubmission(userId: string, taskId: string, userAnswer: string): Promise<boolean> {
+    const task = await this.prisma.task.findUnique({ where: { id: Number(taskId) } });
+    if (!task) {
+      throw new Error('Aufgabe nicht gefunden.');
+    }
 
-  if (containsForbidden || !lower.startsWith('select')) {
-    return {
-      error: 'Nur SELECT-Abfragen sind erlaubt. Andere wie INSERT, UPDATE, DELETE, DROP usw. sind verboten.'
-    };
+    const isCorrect = task.solution.trim() === userAnswer.trim();
+    await this.prisma.submission.create({
+      data: {
+        userId,
+        taskId: Number(taskId),
+        answer: userAnswer,
+        isCorrect,
+      },
+    });
+
+    return isCorrect;
   }
 
-  try {
-    const result = await this.prisma.$queryRawUnsafe(trimmed);
-    return result;
-  } catch (error) {
-    return { error: error.message };
+  async runQuery(query: string): Promise<any> {
+    return await this.prisma.$queryRawUnsafe(query);
   }
-}
 }

@@ -8,4 +8,5 @@ export declare class UsersController {
         name: any;
         rolle: any;
     }>;
+    getAll(req: any): Promise<any[]>;
 }

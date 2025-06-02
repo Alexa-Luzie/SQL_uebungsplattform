@@ -1,0 +1,30 @@
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.status-bar {
+  color: green;
+  margin-bottom: 20px;
+  font-weight: 500;
+  
+  .checkmark {
+    margin-right: 5px;
+  }
+}
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 30px;
+}
+
+h2 {
+  font-size: 1.5em;
+  margin: 20px 0;
+}
+
+.test-status {
+  color: green;
+  margin: 15px 0;
+}

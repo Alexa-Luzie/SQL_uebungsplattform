@@ -12,11 +12,15 @@ export class DatabaseService {
 
     // Verbindet sich mit der postgres-Meta-DB und prüft, ob die DB existiert
     const client = new Client({
-      connectionString: process.env.DATABASE_URL,
-      database: 'postgres', // immer auf die Meta-DB verbinden
+      user: process.env.PGUSER || 'postgres',
+      password: process.env.PGPASSWORD || 'postgres',
+      host: process.env.PGHOST || 'localhost',
+      port: parseInt(process.env.PGPORT || '5432', 10),
+      database: 'postgres',
     });
-    await client.connect();
+    
     try {
+      await client.connect();
       const res = await client.query(
         'SELECT 1 FROM pg_database WHERE datname = $1',
         [dbName]

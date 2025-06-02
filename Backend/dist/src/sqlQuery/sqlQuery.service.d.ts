@@ -5,4 +5,5 @@ export declare class SqlQueryService {
     private readonly prisma;
     constructor(databaseService: DatabaseService, prisma: PrismaService);
     execute(query: string, userId: string, taskId: string): Promise<any>;
+    validateSubmission(userId: string, taskId: string, userAnswer: string): Promise<boolean>;
 }

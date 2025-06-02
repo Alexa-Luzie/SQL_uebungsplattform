@@ -1,4 +1,3 @@
-
 import { Controller, Get, Patch, Param, Body, Request, UseGuards, ForbiddenException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from './users.service';
@@ -20,14 +19,12 @@ export class UsersController {
     };
   }
 
-  /* Alle User abrufen (nur für Admins) muss noch angepasst werden
+  // Alle User abrufen (nur für Admins)
   @UseGuards(AuthGuard('jwt'))
   @Get()
   async getAll(@Request() req) {
-    // Prüfen, ob der User Admin ist
-    const user = await this.usersService.findByIdWithMerchant(req.user.userId);
-    if (!user.isAdmin) throw new ForbiddenException('Nur für Admins erlaubt');
-    return this.usersService.findAll(); 
+    const user = await this.usersService.findById(req.user.userId);
+    if (user.rolle !== 'admin') throw new ForbiddenException('Nur für Admins erlaubt');
+    return this.usersService.findAll();
   }
-  */
- }
+}

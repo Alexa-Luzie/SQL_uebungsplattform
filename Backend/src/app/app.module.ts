@@ -7,7 +7,6 @@ import { AuthModule } from '../auth/auth.module';
 import { UsersModule } from '../users/users.module';
 import { SqlRunnerModule } from '../sql-runner/sql-runner.module';
 import { DatabaseModule } from '../prisma/prisma.module'; // Importiert das DatabaseModule, um auf die Datenbank zuzugreifen
-import { UbungModule } from 'src/ubung/ubung.module';
 import { TasksModule } from '../tasks/tasks.module';
 import { UploadModule } from '../upload/upload.module';
 
@@ -21,6 +20,8 @@ import { UploadModule } from '../upload/upload.module';
     UsersModule,
     TasksModule,
     UploadModule,
+    SqlRunnerModule,
+    DatabaseModule,  // Importiert das DatabaseModule für den Datenbankzugriff
   ],
   controllers: [AppController],
   providers: [AppService],  

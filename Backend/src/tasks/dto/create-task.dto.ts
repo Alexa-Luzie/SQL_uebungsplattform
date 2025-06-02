@@ -9,4 +9,7 @@ export class CreateTaskDto {
 
   @IsString()
   database: string;
+
+  @IsString()
+  solution: string;
 }

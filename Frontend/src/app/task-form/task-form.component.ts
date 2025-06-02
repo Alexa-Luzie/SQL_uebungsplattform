@@ -18,7 +18,7 @@ export class TaskFormComponent implements OnChanges {
   @Output() taskUpdated = new EventEmitter<Task>();
   @Output() cancel = new EventEmitter<void>();
 
-  formTask: Task = { title: '', description: '', database: '' };
+  formTask: Partial<Task> = { title: '', description: '', database: '', solution: '' };
   loading = false;
   error = '';
 
@@ -35,35 +35,36 @@ export class TaskFormComponent implements OnChanges {
     if (changes['task'] && this.task) {
       this.formTask = { ...this.task };
     } else {
-      this.formTask = { title: '', description: '', database: '' };
+      this.formTask = { title: '', description: '', database: '', solution: '' };
     }
   }
 
   submit() {
     this.loading = true;
+    const { id, ...payload } = this.formTask;
     if (this.task && this.task.id) {
       // Bearbeiten
-      this.tasksService.updateTask(this.task.id, this.formTask).subscribe({
+      this.tasksService.updateTask(this.task.id, payload).subscribe({
         next: (updated) => {
           this.loading = false;
           this.taskUpdated.emit(updated);
         },
-        error: () => {
+        error: (err) => {
           this.loading = false;
-          this.error = 'Fehler beim Aktualisieren!';
+          this.error = err.message || 'Fehler beim Aktualisieren!';
         }
       });
     } else {
       // Neu anlegen
-      this.tasksService.createTask(this.formTask).subscribe({
+      this.tasksService.createTask(payload as Omit<Task, 'id'>).subscribe({
         next: (created) => {
           this.loading = false;
           this.taskCreated.emit(created);
-          this.formTask = { title: '', description: '', database: '' };
+          this.formTask = { title: '', description: '', database: '', solution: '' };
         },
-        error: () => {
+        error: (err) => {
           this.loading = false;
-          this.error = 'Fehler beim Erstellen!';
+          this.error = err.message || 'Fehler beim Erstellen!';
         }
       });
     }

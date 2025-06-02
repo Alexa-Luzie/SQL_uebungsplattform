@@ -11,6 +11,7 @@ export declare class TasksController {
         title: string;
         description: string;
         database: string;
+        solution: string;
     }, never, import("node_modules/@prisma/client/runtime/library").DefaultArgs, import("node_modules/.prisma/client").Prisma.PrismaClientOptions>;
     findAll(): import("node_modules/.prisma/client").Prisma.PrismaPromise<{
         id: number;
@@ -19,6 +20,7 @@ export declare class TasksController {
         title: string;
         description: string;
         database: string;
+        solution: string;
     }[]>;
     findOne(id: string): import("node_modules/.prisma/client").Prisma.Prisma__TaskClient<{
         id: number;
@@ -27,6 +29,7 @@ export declare class TasksController {
         title: string;
         description: string;
         database: string;
+        solution: string;
     } | null, null, import("node_modules/@prisma/client/runtime/library").DefaultArgs, import("node_modules/.prisma/client").Prisma.PrismaClientOptions>;
     update(id: string, updateTaskDto: UpdateTaskDto): import("node_modules/.prisma/client").Prisma.Prisma__TaskClient<{
         id: number;
@@ -35,6 +38,7 @@ export declare class TasksController {
         title: string;
         description: string;
         database: string;
+        solution: string;
     }, never, import("node_modules/@prisma/client/runtime/library").DefaultArgs, import("node_modules/.prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string): import("node_modules/.prisma/client").Prisma.Prisma__TaskClient<{
         id: number;
@@ -43,5 +47,6 @@ export declare class TasksController {
         title: string;
         description: string;
         database: string;
+        solution: string;
     }, never, import("node_modules/@prisma/client/runtime/library").DefaultArgs, import("node_modules/.prisma/client").Prisma.PrismaClientOptions>;
 }

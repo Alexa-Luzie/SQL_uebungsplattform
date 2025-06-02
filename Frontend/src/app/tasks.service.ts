@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Task {
-  id?: number;
+  id: number;
   title: string;
   description: string;
   database: string;
   createdAt?: string;
   updatedAt?: string;
+  solution?: string; // <--- HIER ergänzen!
 }
 
 @Injectable({
@@ -27,7 +28,7 @@ export class TasksService {
     return this.http.get<Task>(`${this.apiUrl}/${id}`);
   }
 
-  createTask(task: Task): Observable<Task> {
+  createTask(task: Omit<Task, 'id'>): Observable<Task> {
     return this.http.post<Task>(this.apiUrl, task);
   }
 

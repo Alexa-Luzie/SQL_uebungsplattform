@@ -19,7 +19,10 @@ let TasksService = class TasksService {
     }
     create(createTaskDto) {
         const data = {
-            ...createTaskDto
+            title: createTaskDto.title,
+            description: createTaskDto.description,
+            database: createTaskDto.database,
+            solution: createTaskDto.solution,
         };
         return this.prisma.task.create({ data });
     }
