@@ -9,13 +9,22 @@
 
 <!-- Globale Button-Leiste oben rechts -->
 <div class="global-btn-bar">
-  <button *ngIf="router.url !== '/'" class="home-btn-global" (click)="router.navigate(['/'])">
+  <button class="home-btn-global" (click)="onHomeClick()">
     <img src="home.png" alt="home" class="home-btn-icon" />
   </button>
-  <button *ngIf="isLoggedIn && router.url !== '/profile'" class="profile-btn" (click)="goToProfile()">Profil</button>
-  <button *ngIf="!isLoggedIn && router.url !== '/login'" class="profile-btn" (click)="goToLogin()">Login</button>
-  <!-- Aufgabenverwaltung-Button nur für eingeloggte Nutzer -->
-  <button *ngIf="isLoggedIn" class="tasks-btn" [routerLink]="['/tasks']">Aufgabenverwaltung</button>
+  <button *ngIf="isLoggedIn" class="profile-btn" (click)="goToProfile()">Profil</button>
+  <button *ngIf="!isLoggedIn" class="profile-btn" (click)="goToLogin()">Login</button>
+
+  <!-- Dashboard-Buttons je nach Rolle -->
+  <button *ngIf="isLoggedIn && role === 'STUDENT'" routerLink="/student-view">Student Dashboard</button>
+  <button *ngIf="isLoggedIn && role === 'TUTOR'" routerLink="/tutor-view">Tutor Dashboard</button>
+  <button *ngIf="isLoggedIn && role === 'DOZENT'" routerLink="/dozenten-view">Dozenten Dashboard</button>
+  <button *ngIf="isLoggedIn && role === 'ADMIN'" routerLink="/admin-view">Admin Dashboard</button>
+
+  <!-- Aufgabenverwaltung-Button nur für Lehrende/Tutoren/Admins -->
+  <button *ngIf="isLoggedIn && (role === 'TUTOR' || role === 'ADMIN' || role === 'DOZENT')" class="tasks-btn" routerLink="/tasks">
+    Aufgabenverwaltung
+  </button>
 </div>
 
 <router-outlet></router-outlet>

@@ -33,11 +33,28 @@ let SqlQueryService = class SqlQueryService {
         const dbUrl = this.databaseService.buildDbUrl(userDb);
         const userPrisma = new client_1.PrismaClient({ datasources: { db: { url: dbUrl } } });
         try {
-            return await userPrisma.$queryRawUnsafe(query);
+            const sanitizedQuery = query.replace(/;/g, '');
+            return await userPrisma.$queryRawUnsafe(sanitizedQuery);
         }
         finally {
             await userPrisma.$disconnect();
         }
+    }
+    async validateSubmission(userId, taskId, userAnswer) {
+        const task = await this.prisma.task.findUnique({ where: { id: Number(taskId) } });
+        if (!task) {
+            throw new Error('Aufgabe nicht gefunden.');
+        }
+        const isCorrect = task.solution.trim() === userAnswer.trim();
+        await this.prisma.submission.create({
+            data: {
+                userId,
+                taskId: Number(taskId),
+                answer: userAnswer,
+                isCorrect,
+            },
+        });
+        return isCorrect;
     }
 };
 exports.SqlQueryService = SqlQueryService;

@@ -4,9 +4,7 @@ import { LoginDto } from './dto/login.dto';
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
-    register(dto: RegisterDto): Promise<{
-        message: string;
-    }>;
+    register(dto: RegisterDto): Promise<import("../users/user.entity").User>;
     login(dto: LoginDto): Promise<{
         access_token: string;
     }>;

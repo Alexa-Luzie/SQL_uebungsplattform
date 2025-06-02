@@ -1,0 +1,19 @@
+<h2>Dozenten Dashboard</h2>
+
+<h3>Studenten-Fortschritt</h3>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Aufgaben gesamt</th>
+    <th>Gelöst</th>
+    <th>Fehler</th>
+  </tr>
+  <tr *ngFor="let p of progressList">
+    <td>{{ p.student.name }}</td>
+    <td>{{ p.student.email }}</td>
+    <td>{{ p.tasksTotal }}</td>
+    <td>{{ p.tasksSolved }}</td>
+    <td>{{ p.errors }}</td>
+  </tr>
+</table>

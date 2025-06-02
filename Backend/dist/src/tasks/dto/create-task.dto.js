@@ -15,6 +15,7 @@ class CreateTaskDto {
     title;
     description;
     database;
+    solution;
 }
 exports.CreateTaskDto = CreateTaskDto;
 __decorate([
@@ -29,4 +30,8 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateTaskDto.prototype, "database", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateTaskDto.prototype, "solution", void 0);
 //# sourceMappingURL=create-task.dto.js.map

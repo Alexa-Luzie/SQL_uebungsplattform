@@ -21,25 +21,51 @@ let AuthService = class AuthService {
         this.usersService = usersService;
         this.jwtService = jwtService;
     }
-    async register(dto) {
-        const hashedPassword = await bcrypt.hash(dto.password, 10);
-        const user = await this.usersService.create({
-            email: dto.email,
-            name: dto.name,
-            password: hashedPassword,
-        });
-        return { message: 'User created' };
+    async register(registerDto) {
+        try {
+            const existingUser = await this.usersService.findByEmail(registerDto.email);
+            if (existingUser) {
+                console.warn(`Registrierung fehlgeschlagen: E-Mail ${registerDto.email} bereits registriert`);
+                throw new common_1.ConflictException('E-Mail-Adresse ist bereits registriert');
+            }
+            const hashedPassword = await bcrypt.hash(registerDto.password, 10);
+            const user = await this.usersService.create({
+                email: registerDto.email,
+                name: registerDto.name,
+                password: hashedPassword,
+            });
+            console.log(`Registrierung erfolgreich: ${user.email}`);
+            return { ...user, name: user.name ?? '' };
+        }
+        catch (error) {
+            console.error('Fehler beim Registrieren:', error);
+            if (error.code === '23505') {
+                throw new common_1.ConflictException('E-Mail-Adresse ist bereits registriert');
+            }
+            throw new common_1.InternalServerErrorException('Registrierung fehlgeschlagen');
+        }
     }
     async login(dto) {
-        const user = await this.usersService.findByEmail(dto.email);
-        if (!user)
-            throw new common_1.UnauthorizedException('User not found');
-        const isMatch = await bcrypt.compare(dto.password, user.password);
-        if (!isMatch)
-            throw new common_1.UnauthorizedException('Invalid credentials');
-        const payload = { sub: user.id, email: user.email, name: user.name };
-        const token = this.jwtService.sign(payload);
-        return { access_token: token };
+        try {
+            const user = await this.usersService.findByEmail(dto.email);
+            if (!user) {
+                console.warn(`Login fehlgeschlagen: Benutzer nicht gefunden (${dto.email})`);
+                throw new common_1.UnauthorizedException('Ungültige E-Mail oder Passwort.');
+            }
+            const isMatch = await bcrypt.compare(dto.password, user.password);
+            if (!isMatch) {
+                console.warn(`Login fehlgeschlagen: Ungültiges Passwort (${dto.email})`);
+                throw new common_1.UnauthorizedException('Ungültige E-Mail oder Passwort.');
+            }
+            const payload = { sub: user.id, email: user.email, role: user.rolle };
+            const token = this.jwtService.sign(payload);
+            console.log(`Login erfolgreich für Benutzer: ${dto.email}`);
+            return { access_token: token };
+        }
+        catch (error) {
+            console.error('Fehler beim Login:', error);
+            throw error;
+        }
     }
 };
 exports.AuthService = AuthService;

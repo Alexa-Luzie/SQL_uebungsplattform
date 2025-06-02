@@ -1,30 +1,83 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
+export interface LoginResponse {
+  access_token: string;
+  user: {
+    id: number;
+    email: string;
+    name: string;
+    role: string;
+  };
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthDataService {
-  private apiUrl = 'http://localhost:3000/auth'; // URL zum NestJS-Backend
+  getUserId() {
+    throw new Error('Method not implemented.');
+  }
+  private baseUrl = 'http://localhost:3000';
+  private authUrl = `${this.baseUrl}/auth`;
+  private currentUser$ = new BehaviorSubject<any>(null);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   // Registrierung
   register(data: { email: string; password: string; name: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, data);
+    return this.http.post(`${this.authUrl}/register`, data).pipe(
+      catchError(this.handleError)
+    );
   }
 
   // Login
-  login(data: { email: string; password: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, data);
+  login(data: { email: string; password: string }): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.authUrl}/login`, data).pipe(
+      tap(response => {
+        if (response.access_token) {
+          this.saveToken(response.access_token);
+          this.currentUser$.next(response.user);
+        }
+      }),
+      catchError(this.handleError)
+    );
   }
 
   // Profil (geschützte Route)
   getProfile(): Observable<any> {
-    const token = localStorage.getItem('access_token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get('http://localhost:3000/users/me', { headers });
+    if (!this.isAuthenticated()) {
+      return throwError(() => new Error('Not authenticated'));
+    }
+    
+    return this.http.get(`${this.baseUrl}/users/me`).pipe(
+      tap(user => this.currentUser$.next(user)), // <--- HIER ergänzen!
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.clearToken();
+          this.currentUser$.next(null); // <--- HIER ergänzen!
+          this.router.navigate(['/login']);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+
+  getCurrentUser(): Observable<any> {
+    return this.currentUser$.asObservable();
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'An error occurred';
+    if (error.status === 401) {
+      errorMessage = 'Invalid credentials';
+      this.clearToken();
+    }
+    console.error('Auth service error:', error);
+    return throwError(() => new Error(errorMessage));
   }
 
   // Token speichern
@@ -35,10 +88,17 @@ export class AuthDataService {
   // Token löschen
   clearToken(): void {
     localStorage.removeItem('access_token');
+    console.log('Token wurde gelöscht.');
   }
 
   // Überprüfen, ob der Benutzer angemeldet ist
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token');
+    return !!token;
+  }
+
+  logout() {
+    localStorage.removeItem('access_token');
+    this.currentUser$.next(null);
   }
 }

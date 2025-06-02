@@ -21,11 +21,14 @@ let DatabaseService = class DatabaseService {
     }
     async checkDbExists(dbName) {
         const client = new pg_1.Client({
-            connectionString: process.env.DATABASE_URL,
+            user: process.env.PGUSER || 'postgres',
+            password: process.env.PGPASSWORD || 'postgres',
+            host: process.env.PGHOST || 'localhost',
+            port: parseInt(process.env.PGPORT || '5432', 10),
             database: 'postgres',
         });
-        await client.connect();
         try {
+            await client.connect();
             const res = await client.query('SELECT 1 FROM pg_database WHERE datname = $1', [dbName]);
             return res.rowCount > 0;
         }

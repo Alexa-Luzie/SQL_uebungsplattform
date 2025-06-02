@@ -30,6 +30,12 @@ let UsersController = class UsersController {
             rolle: user.rolle,
         };
     }
+    async getAll(req) {
+        const user = await this.usersService.findById(req.user.userId);
+        if (user.rolle !== 'admin')
+            throw new common_1.ForbiddenException('Nur für Admins erlaubt');
+        return this.usersService.findAll();
+    }
 };
 exports.UsersController = UsersController;
 __decorate([
@@ -40,6 +46,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getMe", null);
+__decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
+    (0, common_1.Get)(),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getAll", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])

@@ -8,13 +8,11 @@ export class TasksService {
   constructor(private prisma: PrismaService) {}
 
   create(createTaskDto: CreateTaskDto) {
-    const data: any = {
-      // Map properties from createTaskDto to the fields expected by Prisma's TaskCreateInput
-      // Example:
-      // title: createTaskDto.title,
-      // description: createTaskDto.description,
-      // ... add other fields as needed
-      ...createTaskDto
+    const data: CreateTaskDto = {
+      title: createTaskDto.title,
+      description: createTaskDto.description,
+      database: createTaskDto.database,
+      solution: createTaskDto.solution,
     };
     return this.prisma.task.create({ data });
   }

@@ -10,6 +10,13 @@ exports.PrismaService = void 0;
 const common_1 = require("@nestjs/common");
 const client_1 = require("@prisma/client");
 let PrismaService = class PrismaService extends client_1.PrismaClient {
+    _submission;
+    get submission() {
+        return this._submission;
+    }
+    set submission(value) {
+        this._submission = value;
+    }
     async enableShutdownHooks(app) {
         this.$on('beforeExit', async () => {
             await app.close();

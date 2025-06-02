@@ -9,13 +9,15 @@ import { CommonModule } from '@angular/common';
   imports: [FormsModule, CommonModule], 
   standalone: true,
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
   email: string = '';
   password: string = '';
   name: string = '';
   isLoggedIn = false;
+  isLoading = false;
+  errorMessage: string = '';
 
   constructor(private authService: AuthDataService, private router: Router) {}
 
@@ -24,21 +26,38 @@ export class RegisterComponent {
   }
 
   onRegister() {
-    console.log('Email:', this.email);
-    console.log('Password:', this.password);
-    console.log('Name:', this.name);
+    if (!this.email || !this.password || !this.name) {
+      this.errorMessage = 'Bitte füllen Sie alle Felder aus.';
+      return;
+    }
 
-    const registerData = { email: this.email, password: this.password, name: this.name };
-    console.log('Registering with data:', registerData);
+    this.isLoading = true;
+    this.errorMessage = '';
 
-    this.authService.register(registerData).subscribe({
-      next: (response) => {
-        console.log('Registration successful', response);
+    this.authService.register({
+      email: this.email.trim(),
+      password: this.password,
+      name: this.name.trim(),
+    }).subscribe({
+      next: (res) => {
+        console.log('Registrierung erfolgreich:', res);
         this.router.navigate(['/login']);
       },
-      error: (error) => {
-        console.error('Registration error', error);
-      }
+      error: (err) => {
+        this.isLoading = false;
+        console.error('Fehler bei der Registrierung:', err);
+
+        if (err.status === 409) {
+          this.errorMessage = 'Diese E-Mail-Adresse ist bereits registriert.';
+        } else if (err.status === 400) {
+          this.errorMessage = 'Ungültige Eingaben. Bitte überprüfen Sie Ihre Daten.';
+        } else if (err.status === 500) {
+          this.errorMessage = 'Serverfehler. Bitte versuchen Sie es später erneut.';
+        } else {
+          this.errorMessage = 'Ein unerwarteter Fehler ist aufgetreten.';
+        }
+      },
+      complete: () => this.isLoading = false,
     });
   }
 
