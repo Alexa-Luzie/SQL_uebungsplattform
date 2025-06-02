@@ -7,7 +7,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { LoginComponent } from './login/login.component';  
 import { RegisterComponent } from './register/register.component'; 
 import { HomeComponent } from './home/home.component';
-import { AuthGuard } from './auth/auth.guard';  
+import { AuthGuard } from './auth/auth.guard';
+import { RoleGuard } from './auth/role.guard';
 import { authInterceptor } from './auth/auth.interceptor';
 import { SqlUploadComponent } from './sql-upload/sql-upload.component';
 
@@ -64,7 +65,7 @@ export const routes: Routes = [
   { 
     path: 'sql-upload', 
     component: SqlUploadComponent, 
-    canActivate: [AuthGuard] 
+    canActivate: [AuthGuard, RoleGuard] 
   },
   { 
     path: 'home', 

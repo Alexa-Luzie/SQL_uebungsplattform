@@ -24,9 +24,19 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthDataService, private router: Router) {}
 
   ngOnInit() {
-    // Redirect to tasks if already logged in
+    // Wenn Token vorhanden, Profil laden und ggf. weiterleiten
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/tasks']);
+      this.authService.getProfile().subscribe({
+        next: (profile) => {
+          console.log('Profil nach Reload geladen:', profile);
+          this.isLoggedIn = true;
+          this.redirectBasedOnRole(profile);
+        },
+        error: (error) => {
+          console.error('Fehler beim Profil-Reload:', error);
+          // Bei Fehler (z.B. ungültiges Token) auf Login bleiben
+        }
+      });
     }
   }
 
@@ -75,23 +85,13 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const role = profile.role?.toUpperCase();
-    
     if (profile.isBlocked) {
       this.router.navigate(['/blocked']);
       return;
     }
 
-    switch(role) {
-      case 'STUDENT':
-        this.router.navigate(['/student-view']);
-        break;
-      case 'TUTOR':
-        this.router.navigate(['/tutor-view']);
-        break;
-      default:
-        this.router.navigate(['/']);
-    }
+    // Nach Login immer auf Profilseite weiterleiten
+    this.router.navigate(['/profile']);
   }
 
   goToRegister() {

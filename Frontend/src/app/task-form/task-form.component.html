@@ -43,11 +43,10 @@
   
   <label>
     Datenbank:
-    <input 
-      [(ngModel)]="formTask.database" 
-      name="database" 
-      required 
-      #database="ngModel" />
+    <select [(ngModel)]="formTask.database" name="database" required #database="ngModel">
+      <option value="">Keine</option>
+      <option *ngFor="let db of importedDatabases" [value]="db.id">{{ db.name }}</option>
+    </select>
     <div *ngIf="database.invalid && database.touched" class="error">
       Datenbank ist erforderlich.
     </div>

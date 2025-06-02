@@ -57,7 +57,7 @@ let AuthService = class AuthService {
                 console.warn(`Login fehlgeschlagen: Ungültiges Passwort (${dto.email})`);
                 throw new common_1.UnauthorizedException('Ungültige E-Mail oder Passwort.');
             }
-            const payload = { sub: user.id, email: user.email, role: user.rolle };
+            const payload = { sub: user.id, email: user.email, name: user.name, rolle: user.rolle };
             const token = this.jwtService.sign(payload);
             console.log(`Login erfolgreich für Benutzer: ${dto.email}`);
             return { access_token: token };

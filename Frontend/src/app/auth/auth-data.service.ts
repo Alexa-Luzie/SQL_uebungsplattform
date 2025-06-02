@@ -18,6 +18,10 @@ export interface LoginResponse {
   providedIn: 'root',
 })
 export class AuthDataService {
+  // Synchronen Zugriff auf aktuellen User ermöglichen (für Guards)
+  getCurrentUserValue(): any {
+    return this.currentUser$.getValue();
+  }
   getUserId() {
     throw new Error('Method not implemented.');
   }
@@ -54,7 +58,10 @@ export class AuthDataService {
     }
     
     return this.http.get(`${this.baseUrl}/users/me`).pipe(
-      tap(user => this.currentUser$.next(user)), // <--- HIER ergänzen!
+      tap(user => {
+        console.log('User vom Backend nach Reload:', user);
+        this.currentUser$.next(user);
+      }),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           this.clearToken();

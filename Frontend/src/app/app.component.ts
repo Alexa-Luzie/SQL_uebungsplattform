@@ -27,16 +27,20 @@ export class AppComponent implements OnInit, OnDestroy {
       console.log('Aktuelle Rolle:', this.role);
     });
 
-    // Optional: Initiales Profil holen, falls Token vorhanden
-    if (this.auth.isAuthenticated()) {
+
+    // Initiales Profil holen, falls Token vorhanden
+    const token = localStorage.getItem('access_token');
+    console.log('Token beim Reload:', token);
+    if (token) {
+      console.log('Rufe getProfile() auf');
       this.auth.getProfile().subscribe();
     }
 
-    window.addEventListener('beforeunload', this.logoutOnUnload);
+    // window.addEventListener('beforeunload', this.logoutOnUnload); // Entfernt, damit Token beim Reload erhalten bleibt
   }
 
   ngOnDestroy() {
-    window.removeEventListener('beforeunload', this.logoutOnUnload);
+    // window.removeEventListener('beforeunload', this.logoutOnUnload); // Entfernt, da kein Logout mehr beim Reload
   }
 
   private checkAuthStatus() {
