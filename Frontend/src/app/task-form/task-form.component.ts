@@ -1,3 +1,4 @@
+import { ImportedDatabaseService, ImportedDatabase } from '../services/imported-database.service';
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -11,6 +12,7 @@ import { TasksService, Task } from '../tasks.service';
   styleUrls: ['./task-form.component.scss']
 })
 export class TaskFormComponent implements OnChanges {
+  importedDatabases: ImportedDatabase[] = [];
   @Input() task: Task | null = null;
   @Output() taskCreated = new EventEmitter<Task>();
   @Output() taskUpdated = new EventEmitter<Task>();
@@ -20,7 +22,14 @@ export class TaskFormComponent implements OnChanges {
   loading = false;
   error = '';
 
-  constructor(private tasksService: TasksService) {}
+  constructor(
+    private tasksService: TasksService,
+    private importedDatabaseService: ImportedDatabaseService
+  ) {
+    this.importedDatabaseService.getImportedDatabases().subscribe((dbs) => {
+      this.importedDatabases = dbs;
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['task'] && this.task) {

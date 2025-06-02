@@ -4,15 +4,15 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 export declare class TasksService {
     private prisma;
     constructor(prisma: PrismaService);
-    create(createTaskDto: CreateTaskDto): import(".prisma/client").Prisma.Prisma__TaskClient<{
+    create(createTaskDto: CreateTaskDto): import("node_modules/.prisma/client").Prisma.Prisma__TaskClient<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
         title: string;
         description: string;
         database: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
-    findAll(): import(".prisma/client").Prisma.PrismaPromise<{
+    }, never, import("node_modules/@prisma/client/runtime/library").DefaultArgs, import("node_modules/.prisma/client").Prisma.PrismaClientOptions>;
+    findAll(): import("node_modules/.prisma/client").Prisma.PrismaPromise<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
@@ -20,28 +20,28 @@ export declare class TasksService {
         description: string;
         database: string;
     }[]>;
-    findOne(id: number): import(".prisma/client").Prisma.Prisma__TaskClient<{
+    findOne(id: number): import("node_modules/.prisma/client").Prisma.Prisma__TaskClient<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
         title: string;
         description: string;
         database: string;
-    } | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
-    update(id: number, updateTaskDto: UpdateTaskDto): import(".prisma/client").Prisma.Prisma__TaskClient<{
+    } | null, null, import("node_modules/@prisma/client/runtime/library").DefaultArgs, import("node_modules/.prisma/client").Prisma.PrismaClientOptions>;
+    update(id: number, updateTaskDto: UpdateTaskDto): import("node_modules/.prisma/client").Prisma.Prisma__TaskClient<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
         title: string;
         description: string;
         database: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
-    remove(id: number): import(".prisma/client").Prisma.Prisma__TaskClient<{
+    }, never, import("node_modules/@prisma/client/runtime/library").DefaultArgs, import("node_modules/.prisma/client").Prisma.PrismaClientOptions>;
+    remove(id: number): import("node_modules/.prisma/client").Prisma.Prisma__TaskClient<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
         title: string;
         description: string;
         database: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
+    }, never, import("node_modules/@prisma/client/runtime/library").DefaultArgs, import("node_modules/.prisma/client").Prisma.PrismaClientOptions>;
 }

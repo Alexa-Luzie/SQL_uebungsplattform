@@ -12,6 +12,7 @@ export class RolesGuard implements CanActivate {
     }
     const request = context.switchToHttp().getRequest();
     const user = request.user; // Benutzer muss im Request verfügbar sein
-    return roles.includes(user?.role); // Prüft, ob die Rolle passt
+    console.log('ROLES GUARD DEBUG:', { roles, user });
+    return roles.includes(user?.rolle); // Prüft, ob die Rolle passt
   }
 }

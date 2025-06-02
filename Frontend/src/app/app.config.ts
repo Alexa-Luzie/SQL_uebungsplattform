@@ -10,7 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { StudentViewComponent } from './pages/student-view/student-view.component';
 import { AuthGuard } from './auth/auth.guard';  
 import { authInterceptor } from './auth/auth.interceptor';
-import { SqlUploadComponent } from './sql-upload.component';
+import { SqlUploadComponent } from './sql-upload/sql-upload.component';
 
 // Aufgabenlisten-Komponente als Standalone-Import
 export const routes: Routes = [

@@ -1,7 +1,12 @@
 <form (ngSubmit)="submit()" *ngIf="!loading">
   <label>Titel: <input [(ngModel)]="formTask.title" name="title" required /></label><br>
   <label>Beschreibung: <input [(ngModel)]="formTask.description" name="description" required /></label><br>
-  <label>Datenbank: <input [(ngModel)]="formTask.database" name="database" required /></label><br>
+  <label>Datenbank:
+    <select [(ngModel)]="formTask.database" name="database">
+      <option value="">Keine</option>
+      <option *ngFor="let db of importedDatabases" [value]="db.id">{{ db.name }}</option>
+    </select>
+  </label><br>
   <button type="submit">{{ task && task.id ? 'Speichern' : 'Erstellen' }}</button>
   <button type="button" (click)="cancelForm()">Abbrechen</button>
 </form>

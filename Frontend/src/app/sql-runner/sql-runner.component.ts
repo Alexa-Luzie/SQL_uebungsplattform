@@ -21,7 +21,7 @@ export class SqlRunnerComponent {
     this.error = '';
     this.result = null;
 
-    this.http.post('http://localhost:3000/sql/execute', { sqlQuery: this.sqlQuery }).subscribe({
+    this.http.post('http://localhost:3000/sql/execute', { query: this.sqlQuery }).subscribe({
       next: (res) => this.result = res,
       error: (err) => this.error = 'Fehler beim Ausführen der Abfrage',
     });
