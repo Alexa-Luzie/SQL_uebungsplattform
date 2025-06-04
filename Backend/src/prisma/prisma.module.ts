@@ -9,4 +9,3 @@ import { PrismaService } from './prisma.service';
   exports: [PrismaService], // Exportiert den PrismaService, damit er in anderen Modulen verwendet werden kann
 })
 export class PrismaModule {}
-export class DatabaseModule {} // Exportiert das DatabaseModule, damit es in anderen Modulen verwendet werden kann

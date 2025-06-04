@@ -35,6 +35,8 @@ import { Roles } from '../auth/roles.decorator'; // Rollen-Dekorator
         userName: userMap[db.uploadedBy] || null,
       }));
     }
+
+
     constructor(private prisma: PrismaService) {}
     @Post('sql')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -63,6 +65,7 @@ import { Roles } from '../auth/roles.decorator'; // Rollen-Dekorator
         data: {
           name: file.originalname,
           fileName: file.filename,
+          path: file.path, // Pfad zur gespeicherten Datei
           uploadedBy: req.user.userId, // User-ID aus JWT
         },
       });

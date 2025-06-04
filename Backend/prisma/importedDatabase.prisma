@@ -1,7 +1,0 @@
-model ImportedDatabase {
-  id         Int      @id @default(autoincrement())
-  name       String   // Name der importierten Datenbank
-  fileName   String   // Name der hochgeladenen SQL-Datei
-  uploadedAt DateTime @default(now())
-  uploadedBy String   // User-ID des Uploaders
-}

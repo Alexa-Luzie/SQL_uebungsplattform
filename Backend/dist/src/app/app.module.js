@@ -15,7 +15,7 @@ const prisma_module_1 = require("../prisma/prisma.module");
 const auth_module_1 = require("../auth/auth.module");
 const users_module_1 = require("../users/users.module");
 const sql_runner_module_1 = require("../sql-runner/sql-runner.module");
-const prisma_module_2 = require("../prisma/prisma.module");
+const database_module_1 = require("../database/database.module");
 const tasks_module_1 = require("../tasks/tasks.module");
 const upload_module_1 = require("../upload/upload.module");
 let AppModule = class AppModule {
@@ -33,7 +33,7 @@ exports.AppModule = AppModule = __decorate([
             tasks_module_1.TasksModule,
             upload_module_1.UploadModule,
             sql_runner_module_1.SqlRunnerModule,
-            prisma_module_2.DatabaseModule,
+            database_module_1.DatabaseModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

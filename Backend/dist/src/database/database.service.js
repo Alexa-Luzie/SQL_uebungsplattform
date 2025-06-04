@@ -11,13 +11,53 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DatabaseService = void 0;
 const common_1 = require("@nestjs/common");
-const child_process_1 = require("child_process");
-const prisma_service_1 = require("../prisma/prisma.service");
+const pgtools = require("pgtools");
+const fs = require("fs");
 const pg_1 = require("pg");
+const prisma_service_1 = require("../prisma/prisma.service");
 let DatabaseService = class DatabaseService {
     prisma;
     constructor(prisma) {
         this.prisma = prisma;
+    }
+    getPostgresConnectionParams() {
+        let user = process.env.PGUSER;
+        let password = process.env.PGPASSWORD;
+        let host = process.env.PGHOST;
+        let port = process.env.PGPORT;
+        if (!user || !password || !host || !port) {
+            const dbUrl = process.env.DATABASE_URL;
+            if (dbUrl) {
+                const match = dbUrl.match(/^postgres(?:ql)?:\/\/(.*?):(.*?)@(.*?):(\d+)\//);
+                if (match) {
+                    user = user || match[1];
+                    password = password || match[2];
+                    host = host || match[3];
+                    port = port || match[4];
+                }
+            }
+        }
+        return {
+            user: user || 'postgres',
+            password: password || 'postgres',
+            host: host || 'localhost',
+            port: port || '5432',
+        };
+    }
+    async importSqlToNewDatabase(sqlFilePath, importedDbId, importedDbName) {
+        const dbName = `imported_${importedDbName}_${importedDbId}`;
+        const { user, password, host, port } = this.getPostgresConnectionParams();
+        await pgtools.createdb({ user, password, host, port: parseInt(port, 10) }, dbName);
+        const sql = fs.readFileSync(sqlFilePath, 'utf-8');
+        const client = new pg_1.Client({ user, password, host, port: parseInt(port, 10), database: dbName });
+        await client.connect();
+        try {
+            await client.query(sql);
+        }
+        finally {
+            await client.end();
+        }
+        return dbName;
     }
     async checkDbExists(dbName) {
         const client = new pg_1.Client({
@@ -36,15 +76,9 @@ let DatabaseService = class DatabaseService {
             await client.end();
         }
     }
-    cloneDatabase(templateDb, newDb) {
-        const user = process.env.PGUSER || 'postgres';
-        const host = process.env.PGHOST || 'localhost';
-        const cmd = `createdb -U ${user} -h ${host} ${newDb} --template=${templateDb}`;
-        (0, child_process_1.execSync)(cmd, { stdio: 'inherit' });
-    }
     buildDbUrl(dbName) {
         const baseUrl = process.env.DATABASE_URL || '';
-        return baseUrl.replace(/(database=)[^&]+/, `$1${dbName}`);
+        return baseUrl.replace(/(postgres(?:ql)?:\/\/.*?:.*?@.*?:\d+\/)([^?]+)/, `$1${dbName}`);
     }
     async getTemplateDbForTask(taskId) {
         const task = await this.prisma.task.findUnique({ where: { id: Number(taskId) } });

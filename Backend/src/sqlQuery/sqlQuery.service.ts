@@ -35,10 +35,11 @@ export class SqlQueryService {
       throw new Error(`Vorlagen-Datenbank ${templateDb} existiert nicht!`);
     }
 
-    // 4. Prüfen, ob User-DB existiert, sonst anlegen
+    /* 4. Prüfen, ob User-DB existiert, sonst anlegen   MUSS ÜBERARBEITET WERDEN
     if (!await this.databaseService.checkDbExists(userDb)) {
       this.databaseService.cloneDatabase(templateDb, userDb);
     }
+    */
 
     // 5. Mit Prisma auf die User-DB verbinden
     const dbUrl = this.databaseService.buildDbUrl(userDb);

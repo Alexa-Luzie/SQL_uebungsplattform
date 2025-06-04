@@ -6,7 +6,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { AuthModule } from '../auth/auth.module';
 import { UsersModule } from '../users/users.module';
 import { SqlRunnerModule } from '../sql-runner/sql-runner.module';
-import { DatabaseModule } from '../prisma/prisma.module'; // Importiert das DatabaseModule, um auf die Datenbank zuzugreifen
+import { DatabaseModule } from '../database/database.module';
 import { TasksModule } from '../tasks/tasks.module';
 import { UploadModule } from '../upload/upload.module';
 

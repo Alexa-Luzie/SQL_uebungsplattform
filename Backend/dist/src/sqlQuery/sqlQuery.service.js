@@ -27,9 +27,6 @@ let SqlQueryService = class SqlQueryService {
         if (!await this.databaseService.checkDbExists(templateDb)) {
             throw new Error(`Vorlagen-Datenbank ${templateDb} existiert nicht!`);
         }
-        if (!await this.databaseService.checkDbExists(userDb)) {
-            this.databaseService.cloneDatabase(templateDb, userDb);
-        }
         const dbUrl = this.databaseService.buildDbUrl(userDb);
         const userPrisma = new client_1.PrismaClient({ datasources: { db: { url: dbUrl } } });
         try {

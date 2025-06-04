@@ -5,3 +5,19 @@
   <div *ngIf="uploading">Lade hoch...</div>
   <div *ngIf="message">{{ message }}</div>
 </div>
+
+
+<div class="dropdown-container">
+  <label for="db-select">Importierte SQL-Datei auswählen:</label>
+  <select id="db-select" [(ngModel)]="selectedDbId">
+    <option [ngValue]="null">-- Bitte wählen --</option>
+    <option *ngFor="let db of databases" [ngValue]="db.id">
+      {{ db.name }} (ID: {{ db.id }})
+      <span *ngIf="db.created">✔️</span>
+    </option>
+  </select>
+  <button class="create-db-btn" (click)="createDatabase()" [disabled]="!selectedDbId || selectedDbCreated">
+    Datenbank erstellen
+  </button>
+  <span class="db-status" *ngIf="dbMessage">{{ dbMessage }}</span>
+</div>

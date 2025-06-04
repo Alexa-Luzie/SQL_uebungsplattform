@@ -39,10 +39,12 @@ model Task {
 
 model ImportedDatabase {
   id         Int      @id @default(autoincrement())
-  name       String   // Name der importierten Datenbank
-  fileName   String   // Name der hochgeladenen SQL-Datei
+  name       String                                         // Name der importierten Datenbank
+  fileName   String                                         // Name der hochgeladenen SQL-Datei
   uploadedAt DateTime @default(now())
-  uploadedBy String   // User-ID des Uploaders
+  uploadedBy String                                         // User-ID des Uploaders
+  path       String                                         // Pfad zur gespeicherten SQL-Datei
+  created    Boolean  @default(false)                       // wurde die DB erstellt
 }
 
 model Submission {
