@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-
+import { AuthDataService } from '../auth/auth-data.service';
 // Passe das Interface ggf. an dein Projekt an!
 export interface Task {
   id: number;
@@ -24,30 +24,55 @@ export class SqlRunnerComponent {
   sqlQuery: string = '';
   result: any = null;
   error: string = '';
-  authService: any;
+  AuthDataService: AuthDataService;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authDataService: AuthDataService) {
+    this.AuthDataService = authDataService;
+  }
 
   ausfuehren() {
+    if (!this.sqlQuery || this.sqlQuery.trim() === '') {
+      this.error = 'Die SQL-Abfrage darf nicht leer sein.';
+      this.result = null;
+      return;
+    }
+
     const payload: any = {
       query: this.sqlQuery,
-      userId: this.authService.getUserId(), // Benutzer-ID aus dem Auth-Service
+      userId: this.AuthDataService.getUserId(),
     };
 
     if (this.task?.id) {
-      payload.taskId = this.task.id; // Aufgaben-ID nur hinzufügen, wenn sie vorhanden ist
+      payload.taskId = this.task.id;
     }
 
     this.http.post('http://localhost:3000/sql/execute', payload).subscribe({
       next: (res: any) => {
         console.log('Ergebnis:', res);
-        if (res.isCorrect !== null) {
-          alert(res.isCorrect ? 'Ihre Antwort ist korrekt!' : 'Ihre Antwort ist falsch. Bitte versuchen Sie es erneut.');
+        console.log('Serverantwort Struktur:', JSON.stringify(res));
+        if (res && res.result && Array.isArray(res.result)) {
+          console.log('Daten sind массивом:', res.result);
+          this.result = res.result;
+          this.error = '';
+        } else {
+          console.warn('Ungültiges Datenformat: Daten sind nicht Array.', res);
+          this.result = null;
+          this.error = 'Ungültiges Datenformat. Daten sind nicht Array.';
         }
       },
       error: (err) => {
         console.error('Fehler:', err);
+        this.result = null;
+        this.error = 'Fehler beim Ausführen der SQL-Abfrage.';
       },
     });
+  }
+
+  hasResultData(): boolean {
+    return this.result && Array.isArray(this.result) && this.result.length > 0;
+  }
+
+  getKeys(obj: any): string[] {
+    return obj ? Object.keys(obj) : [];
   }
 }

@@ -25,6 +25,9 @@ export class SqlRunnerService {
   }
 
   async runQuery(query: string): Promise<any> {
-    return await this.prisma.$queryRawUnsafe(query);
+    console.log('Ausgeführte SQL-Abfrage:', query); 
+    const result = await this.prisma.$queryRawUnsafe(query);
+    console.log('Ergebnis der SQL-Abfrage:', result); 
+    return result;
   }
 }

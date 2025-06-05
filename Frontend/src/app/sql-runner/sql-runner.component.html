@@ -6,9 +6,43 @@
 <br>
 <button (click)="ausfuehren()">Ausführen</button>
 
-<div *ngIf="result">
+<div *ngIf="hasResultData()">
   <h4>Ergebnis:</h4>
-  <pre>{{ result | json }}</pre>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #1976d2; 
+      color: white;
+      font-weight: normal; /* Non-bold text */
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    tr:hover {
+      background-color: #ddd;
+    }
+  </style>
+  <table>
+    <thead>
+      <tr>
+        <th *ngFor="let key of getKeys(result[0])">{{ key }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of result">
+        <td *ngFor="let key of getKeys(row)">{{ row[key] }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <div *ngIf="error" style="color: red;">

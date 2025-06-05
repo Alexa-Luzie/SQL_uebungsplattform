@@ -22,8 +22,9 @@ export class AuthDataService {
   getCurrentUserValue(): any {
     return this.currentUser$.getValue();
   }
-  getUserId() {
-    throw new Error('Method not implemented.');
+  getUserId(): number | null {
+    const currentUser = this.getCurrentUserValue();
+    return currentUser ? currentUser.id : null;
   }
   private baseUrl = 'http://localhost:3000';
   private authUrl = `${this.baseUrl}/auth`;
