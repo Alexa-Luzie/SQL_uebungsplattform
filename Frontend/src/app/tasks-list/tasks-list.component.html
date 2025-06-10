@@ -3,7 +3,7 @@
 
 <!-- Zeige "Keine Aufgaben vorhanden" und "Neue Aufgabe" nur bei der Route /tasks -->
 <div *ngIf="!loading && tasks.length === 0 && !error && isTasksRoute()">Keine Aufgaben vorhanden.</div>
-<button *ngIf="isLehrkraft() && isTasksRoute() && tasks.length === 0" (click)="showForm = true">Neue Aufgabe</button>
+<button *ngIf="isLehrkraft() && isTasksRoute()" (click)="showForm = true">Neue Aufgabe</button>
 
 <!-- Dropdown-Menü für Studierende, Liste für Lehrkräfte -->
 <ng-container *ngIf="!loading && tasks.length > 0">
