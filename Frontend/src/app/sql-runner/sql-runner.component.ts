@@ -26,6 +26,9 @@ export class SqlRunnerComponent {
   error: string = '';
   AuthDataService: AuthDataService;
 
+  taskListVisible: boolean = false;
+  taskList: Task[] = [];
+
   constructor(private http: HttpClient, private authDataService: AuthDataService) {
     this.AuthDataService = authDataService;
   }
@@ -51,7 +54,7 @@ export class SqlRunnerComponent {
         console.log('Ergebnis:', res);
         console.log('Serverantwort Struktur:', JSON.stringify(res));
         if (res && res.result && Array.isArray(res.result)) {
-          console.log('Daten sind массивом:', res.result);
+          console.log('Daten sind Array:', res.result);
           this.result = res.result;
           this.error = '';
         } else {
@@ -64,6 +67,29 @@ export class SqlRunnerComponent {
         console.error('Fehler:', err);
         this.result = null;
         this.error = 'Fehler beim Ausführen der SQL-Abfrage.';
+      },
+    });
+  }
+
+  selectTask(): void {
+    this.taskListVisible = !this.taskListVisible;
+    if (this.taskList.length === 0) {
+      this.loadTasks();
+    }
+  }
+
+  onTaskSelect(task: Task): void {
+    this.task = task;
+    this.taskListVisible = false;
+  }
+
+  loadTasks(): void {
+    this.http.get<Task[]>('http://localhost:3000/tasks').subscribe({
+      next: (tasks) => {
+        this.taskList = tasks;
+      },
+      error: (err) => {
+        console.error('Fehler beim Laden der Aufgaben:', err);
       },
     });
   }
