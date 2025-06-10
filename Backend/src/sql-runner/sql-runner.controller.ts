@@ -6,7 +6,7 @@ export class SqlRunnerController {
   constructor(private readonly sqlRunnerService: SqlRunnerService) {}
 
   @Post('execute')
-  async execute(@Body() body: { query: string; userId: string; taskId?: string }) {
+  async execute(@Body() body: { query: string; userId: string; taskId?: string; database?: string }) {
     console.log('Empfangene Anfrage:', body);
 
     if (!body.query || !body.userId) {
@@ -17,7 +17,10 @@ export class SqlRunnerController {
       ? await this.sqlRunnerService.validateSubmission(body.userId, body.taskId, body.query)
       : null; // Keine Validierung, wenn taskId nicht angegeben ist
 
-    const result = await this.sqlRunnerService.runQuery(body.query);
+    if (!body.database) {
+      throw new BadRequestException('Datenbank-ID (database) muss angegeben werden.');
+    }
+    const result = await this.sqlRunnerService.runQuery(body.query, body.database);
 
     return { result, isCorrect };
   }

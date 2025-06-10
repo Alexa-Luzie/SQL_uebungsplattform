@@ -76,9 +76,14 @@ let DatabaseService = class DatabaseService {
             await client.end();
         }
     }
-    buildDbUrl(dbName) {
+    async buildDbUrl(dbId) {
         const baseUrl = process.env.DATABASE_URL || '';
-        return baseUrl.replace(/(postgres(?:ql)?:\/\/.*?:.*?@.*?:\d+\/)([^?]+)/, `$1${dbName}`);
+        const importedDb = await this.prisma.importedDatabase.findUnique({ where: { id: Number(dbId) } });
+        if (!importedDb) {
+            throw new Error('ImportedDatabase nicht gefunden');
+        }
+        const fullDbName = `imported_${importedDb.name}_${importedDb.id}`;
+        return baseUrl.replace(/(postgres(?:ql)?:\/\/.*?:.*?@.*?:\d+\/)([^?]+)/, `$1${fullDbName}`);
     }
     async getTemplateDbForTask(taskId) {
         const task = await this.prisma.task.findUnique({ where: { id: Number(taskId) } });

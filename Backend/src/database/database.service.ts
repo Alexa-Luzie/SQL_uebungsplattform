@@ -100,10 +100,27 @@ export class DatabaseService {
   */
 
 // Baut die DB-URL für Prisma      WIRD UMBEDINGT FÜR SQL SKRIPTS BENÖTIGT UM SIE AUF DER RICHTIGEN DATENBANK AUSZUFÜHREN
-  buildDbUrl(dbName: string): string {
+  /**
+   * Baut die DB-URL für Prisma anhand des gewünschten Datenbank-Namensschemas
+   * @param dbId Die ID der Datenbank (z.B. aus ImportedDatabase.id)
+   * @param dbName Der Name der Datenbank (z.B. aus ImportedDatabase.name)
+   * @returns Vollständige DB-URL für Prisma
+   */
+
+
+  /**
+   * Baut die DB-URL für Prisma anhand der ImportedDatabase-ID
+   * Sucht den Namen in der Tabelle ImportedDatabase und baut daraus den DB-Namen
+   */
+  async buildDbUrl(dbId: string): Promise<string> {
     const baseUrl = process.env.DATABASE_URL || '';
-    // Ersetze den Datenbanknamen im Pfad der URL
-    return baseUrl.replace(/(postgres(?:ql)?:\/\/.*?:.*?@.*?:\d+\/)([^?]+)/, `$1${dbName}`);
+    // Hole die Datenbank-Infos aus ImportedDatabase
+    const importedDb = await this.prisma.importedDatabase.findUnique({ where: { id: Number(dbId) } });
+    if (!importedDb) {
+      throw new Error('ImportedDatabase nicht gefunden');
+    }
+    const fullDbName = `imported_${importedDb.name}_${importedDb.id}`;
+    return baseUrl.replace(/(postgres(?:ql)?:\/\/.*?:.*?@.*?:\d+\/)([^?]+)/, `$1${fullDbName}`);
   }
 
   // FUNKTION MUSS AUF KOREKKTHEIT ÜBERPRÜFT WERDEN    Holt die Vorlage-Datenbank einer Aufgabe aus der Datenbank (Task.database)       auf Vorlagen DB werden keine Queries ausgeführt     

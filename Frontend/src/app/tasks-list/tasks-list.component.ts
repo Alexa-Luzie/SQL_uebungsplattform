@@ -30,6 +30,8 @@ export class TasksListComponent implements OnInit {
   userRole: User['rolle'] | null = null;
   error: string | null = null;
 
+  selectedTask: Task | null = null;
+
   @Output() taskSelected = new EventEmitter<Task>();
 
   constructor(
@@ -97,6 +99,17 @@ export class TasksListComponent implements OnInit {
   onCancel() {
     this.showForm = false;
     this.editTask = null;
+  }
+
+  // Sicheres Dropdown-Handling für Studierende
+  onDropdownChange(event: Event) {
+    const select = event.target as HTMLSelectElement | null;
+    if (select && select.selectedIndex > 0) {
+      this.selectedTask = this.tasks[select.selectedIndex - 1];
+      this.selectTask(this.selectedTask);
+    } else {
+      this.selectedTask = null;
+    }
   }
 
   selectTask(task: Task) {

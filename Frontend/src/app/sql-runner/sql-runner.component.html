@@ -5,7 +5,7 @@
 
 <br>
 <button (click)="ausfuehren()">Ausführen</button>
-<button (click)="selectTask()">Aufgabe Wählen</button>
+
 
 <div *ngIf="hasResultData()">
   <h4>Ergebnis:</h4>
@@ -50,10 +50,3 @@
   {{ error }}
 </div>
 
-<!-- Add a section for task list if needed -->
-<div *ngIf="taskListVisible">
-  <h4>Task List:</h4>
-  <ul>
-    <li *ngFor="let task of taskList" (click)="onTaskSelect(task)">{{ task.id }}</li>
-  </ul>
-</div>

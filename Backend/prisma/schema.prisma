@@ -30,7 +30,7 @@ model Task {
   id          Int      @id @default(autoincrement())
   title       String
   description String
-  database    String   // Name oder ID der zugehörigen Datenbank
+  database    String   // ID der zugehörigen Datenbank
   solution    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

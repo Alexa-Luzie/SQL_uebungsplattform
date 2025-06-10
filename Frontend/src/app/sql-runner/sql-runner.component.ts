@@ -34,6 +34,9 @@ export class SqlRunnerComponent {
   }
 
   ausfuehren() {
+
+    
+
     if (!this.sqlQuery || this.sqlQuery.trim() === '') {
       this.error = 'Die SQL-Abfrage darf nicht leer sein.';
       this.result = null;
@@ -47,6 +50,9 @@ export class SqlRunnerComponent {
 
     if (this.task?.id) {
       payload.taskId = this.task.id;
+    }
+    if (this.task?.database) {
+      payload.database = this.task.database;  // database id 
     }
 
     this.http.post('http://localhost:3000/sql/execute', payload).subscribe({
@@ -71,28 +77,7 @@ export class SqlRunnerComponent {
     });
   }
 
-  selectTask(): void {
-    this.taskListVisible = !this.taskListVisible;
-    if (this.taskList.length === 0) {
-      this.loadTasks();
-    }
-  }
 
-  onTaskSelect(task: Task): void {
-    this.task = task;
-    this.taskListVisible = false;
-  }
-
-  loadTasks(): void {
-    this.http.get<Task[]>('http://localhost:3000/tasks').subscribe({
-      next: (tasks) => {
-        this.taskList = tasks;
-      },
-      error: (err) => {
-        console.error('Fehler beim Laden der Aufgaben:', err);
-      },
-    });
-  }
 
   hasResultData(): boolean {
     return this.result && Array.isArray(this.result) && this.result.length > 0;

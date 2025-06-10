@@ -1,3 +1,16 @@
 <h2>SQL-Übungsplattform</h2>
-<app-tasks-list (taskSelected)="onTaskSelected($event)"></app-tasks-list>
-<app-sql-runner [task]="selectedTask"></app-sql-runner>
+
+<div *ngIf="loading">Lade Aufgaben...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<div *ngIf="!loading && tasks.length > 0">
+  <label for="taskSelect">Aufgabe auswählen:</label>
+  <select id="taskSelect" (change)="onTaskSelected($event)">
+    <option value="">Bitte Aufgabe wählen</option>
+    <option *ngFor="let task of tasks" [value]="task.id">{{ task.title }} – {{ task.description }}</option>
+  </select>
+</div>
+
+<ng-container *ngIf="selectedTask">
+  <app-sql-runner [task]="selectedTask"></app-sql-runner>
+</ng-container>

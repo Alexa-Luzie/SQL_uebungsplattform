@@ -42,7 +42,7 @@ export class SqlQueryService {
     */
 
     // 5. Mit Prisma auf die User-DB verbinden
-    const dbUrl = this.databaseService.buildDbUrl(userDb);
+    const dbUrl = await this.databaseService.buildDbUrl(userDb);
     const userPrisma = new PrismaClient({ datasources: { db: { url: dbUrl } } });
     try {
       const sanitizedQuery = query.replace(/;/g, ''); // Beispiel für einfache Validierung

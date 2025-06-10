@@ -24,19 +24,9 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthDataService, private router: Router) {}
 
   ngOnInit() {
-    // Wenn Token vorhanden, Profil laden und ggf. weiterleiten
+    // Redirect to tasks if already logged in
     if (this.authService.isAuthenticated()) {
-      this.authService.getProfile().subscribe({
-        next: (profile) => {
-          console.log('Profil nach Reload geladen:', profile);
-          this.isLoggedIn = true;
-          this.redirectBasedOnRole(profile);
-        },
-        error: (error) => {
-          console.error('Fehler beim Profil-Reload:', error);
-          // Bei Fehler (z.B. ungültiges Token) auf Login bleiben
-        }
-      });
+      this.router.navigate(['/tasks']);
     }
   }
 

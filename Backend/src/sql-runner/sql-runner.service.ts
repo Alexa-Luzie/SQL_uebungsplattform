@@ -1,9 +1,12 @@
+
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { PrismaClient } from '@prisma/client';
+import { DatabaseService } from '../database/database.service';
 
 @Injectable()
 export class SqlRunnerService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly databaseService: DatabaseService) {}
 
   async validateSubmission(userId: string, taskId: string, userAnswer: string): Promise<boolean> {
     const task = await this.prisma.task.findUnique({ where: { id: Number(taskId) } });
@@ -24,10 +27,22 @@ export class SqlRunnerService {
     return isCorrect;
   }
 
-  async runQuery(query: string): Promise<any> {
-    console.log('Ausgeführte SQL-Abfrage:', query); 
-    const result = await this.prisma.$queryRawUnsafe(query);
-    console.log('Ergebnis der SQL-Abfrage:', result); 
-    return result;
+  async runQuery(query: string, dbId: string): Promise<any> {
+    console.log('Ausgeführte SQL-Abfrage:', query);
+    const databaseUrl = await this.databaseService.buildDbUrl(dbId);
+    if (databaseUrl) {
+      const customClient = new PrismaClient({ datasources: { db: { url: databaseUrl } } });
+      try {
+        const result = await customClient.$queryRawUnsafe(query);
+        console.log('Ergebnis der SQL-Abfrage:', result);
+        return result;
+      } finally {
+        await customClient.$disconnect();
+      }
+    } else {
+      const result = await this.prisma.$queryRawUnsafe(query);
+      console.log('Ergebnis der SQL-Abfrage:', result);
+      return result;
+    }
   }
 }
