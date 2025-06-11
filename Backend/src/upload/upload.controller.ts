@@ -5,6 +5,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { RolesGuard } from '../auth/roles.guard'; // Guard für Rollen
 import { Roles } from '../auth/roles.decorator'; // Rollen-Dekorator
+import { sanitizeDbName } from '../utils/sanitize-db-name';
   
   @Controller('upload')
   export class UploadController {
@@ -59,11 +60,12 @@ import { Roles } from '../auth/roles.decorator'; // Rollen-Dekorator
       }),
     )
     async uploadFile(@UploadedFile() file: Express.Multer.File, @Req() req) {
-      // Eintrag in ImportedDatabase anlegen
+      // Eintrag in ImportedDatabase anlegen, Name wird bereinigt
       // req.user.userId kommt aus JwtStrategy.validate
+      const cleanedName = sanitizeDbName(file.originalname);
       const importedDb = await this.prisma.importedDatabase.create({
         data: {
-          name: file.originalname,
+          name: cleanedName,
           fileName: file.filename,
           path: file.path, // Pfad zur gespeicherten Datei
           uploadedBy: req.user.userId, // User-ID aus JWT
@@ -73,6 +75,7 @@ import { Roles } from '../auth/roles.decorator'; // Rollen-Dekorator
         message: 'Datei erfolgreich hochgeladen',
         fileName: file.filename,
         importedDatabaseId: importedDb.id,
+        cleanedName: importedDb.name,
       };
     }
   }

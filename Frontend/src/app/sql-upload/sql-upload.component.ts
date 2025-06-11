@@ -43,6 +43,9 @@ export class SqlUploadComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.message = res.message + ' (' + res.fileName + ')';
+          if (res.cleanedName) {
+            this.message += `\nBereinigter Name: ${res.cleanedName}`;
+          }
           this.uploading = false;
           this.loadDatabases();
         },

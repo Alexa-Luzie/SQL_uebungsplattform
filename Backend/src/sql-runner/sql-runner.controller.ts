@@ -1,9 +1,18 @@
-import { Body, Controller, Post, BadRequestException } from '@nestjs/common';
+
+import { Body, Controller, Post, BadRequestException, Get, Param } from '@nestjs/common';
 import { SqlRunnerService } from './sql-runner.service';
 
 @Controller('sql')
 export class SqlRunnerController {
   constructor(private readonly sqlRunnerService: SqlRunnerService) {}
+
+  @Get('structure/:dbId')
+  async getStructure(@Param('dbId') dbId: string) {
+    if (!dbId) {
+      throw new BadRequestException('Datenbank-ID (dbId) muss angegeben werden.');
+    }
+    return this.sqlRunnerService.getDatabaseStructure(dbId);
+  }
 
   @Post('execute')
   async execute(@Body() body: { query: string; userId: string; taskId?: string; database?: string }) {

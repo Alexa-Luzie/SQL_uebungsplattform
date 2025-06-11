@@ -1,15 +1,4 @@
-  <!-- SQL-Upload-Button für Admins und Tutoren -->
-  <button *ngIf="isLoggedIn && (role === 'ADMIN' || role === 'TUTOR')" class="sql-upload-btn" routerLink="/sql-upload">
-    SQL-Upload
-  </button>
-<div class="login-status-indicator" (click)="goToLogin()" style="cursor:pointer">
-  <ng-container *ngIf="isLoggedIn; else loggedOut">
-    <span>✅ Eingeloggt</span>
-  </ng-container>
-  <ng-template #loggedOut>
-    <span>🚫 Nicht eingeloggt</span>
-  </ng-template>
-</div>
+  <!-- SQL-Upload-Button und Login-Status entfernt -->
 
 <!-- Globale Button-Leiste oben rechts -->
 <div class="global-btn-bar">
@@ -29,8 +18,8 @@
   <button *ngIf="isLoggedIn && (role === 'TUTOR' || role === 'ADMIN' || role === 'DOZENT')" class="tasks-btn" routerLink="/tasks">
     Aufgabenverwaltung
   </button>
-  <!-- SQL-Upload-Button für Admins und Tutoren, direkt hinter Aufgabenverwaltung -->
-  <button *ngIf="isLoggedIn && (role === 'ADMIN' || role === 'TUTOR')" class="sql-upload-btn" routerLink="/sql-upload">
+  <!-- SQL-Upload-Button für Lehrende/Tutoren/Admins -->
+  <button *ngIf="isLoggedIn && (role === 'TUTOR' || role === 'ADMIN' || role === 'DOZENT')" class="tasks-btn" routerLink="/sql-upload">
     SQL-Upload
   </button>
 </div>

@@ -1,5 +1,11 @@
+
 <div class="sql-upload-container">
   <h2>SQL-Datei hochladen</h2>
+  <div class="sql-upload-hint">
+    <b>Hinweis:</b> Die SQL-Datei muss <span style="color:#388e3c;font-weight:bold">PostgreSQL-kompatibel</span> sein.<br>
+    <span style="color:#d32f2f">MySQL-Dateien werden <b>nicht</b> unterstützt!</span>
+    <br>
+  </div>
   <input type="file" accept=".sql" (change)="onFileSelected($event)" />
   <button (click)="uploadFile()" [disabled]="!selectedFile || uploading">Hochladen</button>
   <div *ngIf="uploading">Lade hoch...</div>

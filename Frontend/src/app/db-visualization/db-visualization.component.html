@@ -1,0 +1,24 @@
+<div class="db-visualization-box">
+  <h3>Datenbank-Visualisierung</h3>
+  <div *ngIf="loading">Lade Datenbankstruktur...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  <ng-container *ngIf="structure">
+    <div class="tables-flex-row">
+      <div *ngFor="let tableName of structure | keyvalue" class="table-box">
+        <div class="table-title">{{ tableName.key }}</div>
+        <table>
+          <thead>
+            <tr>
+              <th *ngFor="let col of asArray(tableName.value.columns)">{{ col }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of asArray(tableName.value.rows)">
+              <td *ngFor="let col of asArray(tableName.value.columns)">{{ row[col] }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+</div>

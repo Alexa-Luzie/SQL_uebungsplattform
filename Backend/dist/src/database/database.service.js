@@ -15,6 +15,7 @@ const pgtools = require("pgtools");
 const fs = require("fs");
 const pg_1 = require("pg");
 const prisma_service_1 = require("../prisma/prisma.service");
+const sanitize_db_name_1 = require("../utils/sanitize-db-name");
 let DatabaseService = class DatabaseService {
     prisma;
     constructor(prisma) {
@@ -45,7 +46,8 @@ let DatabaseService = class DatabaseService {
         };
     }
     async importSqlToNewDatabase(sqlFilePath, importedDbId, importedDbName) {
-        const dbName = `imported_${importedDbName}_${importedDbId}`;
+        const safeName = (0, sanitize_db_name_1.sanitizeDbName)(importedDbName);
+        const dbName = `imported_${safeName}_${importedDbId}`;
         const { user, password, host, port } = this.getPostgresConnectionParams();
         await pgtools.createdb({ user, password, host, port: parseInt(port, 10) }, dbName);
         const sql = fs.readFileSync(sqlFilePath, 'utf-8');
@@ -82,7 +84,8 @@ let DatabaseService = class DatabaseService {
         if (!importedDb) {
             throw new Error('ImportedDatabase nicht gefunden');
         }
-        const fullDbName = `imported_${importedDb.name}_${importedDb.id}`;
+        const safeName = (0, sanitize_db_name_1.sanitizeDbName)(importedDb.name);
+        const fullDbName = `imported_${safeName}_${importedDb.id}`;
         return baseUrl.replace(/(postgres(?:ql)?:\/\/.*?:.*?@.*?:\d+\/)([^?]+)/, `$1${fullDbName}`);
     }
     async getTemplateDbForTask(taskId) {

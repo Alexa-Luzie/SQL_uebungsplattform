@@ -1,10 +1,9 @@
-<p style="color:green;">TEST SQL-RUNNER VISIBLE</p>
-<h3>SQL-Abfrage ausführen</h3>
 
-<textarea [(ngModel)]="sqlQuery" rows="6" cols="80" placeholder="Geben Sie hier Ihre SQL-Abfrage ein..."></textarea>
-
-<br>
-<button (click)="ausfuehren()">Ausführen</button>
+<div class="sql-query-box">
+  <div class="sql-query-header">SQL-Abfrage ausführen</div>
+  <textarea class="sql-query-textarea" [(ngModel)]="sqlQuery" rows="7" placeholder="Geben Sie hier Ihre SQL-Abfrage ein..."></textarea>
+  <button class="sql-query-btn" (click)="ausfuehren()">Ausführen</button>
+</div>
 
 
 <div *ngIf="hasResultData()">
@@ -21,7 +20,7 @@
       text-align: left;
     }
     th {
-      background-color: #1976d2; 
+      background-color: #388e3c; /* Grün */
       color: white;
       font-weight: normal; /* Non-bold text */
     }

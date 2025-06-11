@@ -3,10 +3,18 @@ import * as pgtools from 'pgtools';
 import * as fs from 'fs';
 import { Client } from 'pg';
 import { PrismaService } from '../prisma/prisma.service';
+import { sanitizeDbName } from '../utils/sanitize-db-name';
 
 @Injectable()
 export class DatabaseService {
   constructor(private readonly prisma: PrismaService) {}
+
+  /**
+   * Hilfsfunktion: Wandelt einen Namen in ein sicheres DB-Schema um (nur Buchstaben, Zahlen, Unterstriche)
+   * Ersetzt alle nicht-alphanumerischen Zeichen durch _
+   */
+
+  // Entfernt, stattdessen Hilfsfunktion aus utils
 
   /**
    * Importiert eine SQL-Datei in eine neu erstellte PostgreSQL-Datenbank.
@@ -46,8 +54,9 @@ export class DatabaseService {
   }
 
   async importSqlToNewDatabase(sqlFilePath: string, importedDbId: string, importedDbName: string): Promise<string> {
-    // Namensschema einer Datenbank: imported_<name>_<ID>
-    const dbName = `imported_${importedDbName}_${importedDbId}`;
+    // Namensschema einer Datenbank: imported_<name>_<ID> (Name wird sanitisiert)
+    const safeName = sanitizeDbName(importedDbName);
+    const dbName = `imported_${safeName}_${importedDbId}`;
     const { user, password, host, port } = this.getPostgresConnectionParams();
 
     // 1. Neue Datenbank anlegen mit pgtools
@@ -119,7 +128,8 @@ export class DatabaseService {
     if (!importedDb) {
       throw new Error('ImportedDatabase nicht gefunden');
     }
-    const fullDbName = `imported_${importedDb.name}_${importedDb.id}`;
+    const safeName = sanitizeDbName(importedDb.name);
+    const fullDbName = `imported_${safeName}_${importedDb.id}`;
     return baseUrl.replace(/(postgres(?:ql)?:\/\/.*?:.*?@.*?:\d+\/)([^?]+)/, `$1${fullDbName}`);
   }
 
