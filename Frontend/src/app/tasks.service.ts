@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Task {
-  id: number;
+  id: string;
   title: string;
-  description: string;
-  database: string;
+  description?: string;
+  status?: string;
+  database?: string | null; // Optional und erlaubt null
   createdAt?: string;
   updatedAt?: string;
-  solution?: string; // <--- HIER ergänzen!
+  solution?: string;
 }
 
 @Injectable({
@@ -36,7 +37,8 @@ export class TasksService {
     return this.http.patch<Task>(`${this.apiUrl}/${id}`, task);
   }
 
-  deleteTask(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  deleteTask(taskId: number) {
+    console.log(`Sende DELETE-Anfrage für Task mit ID ${taskId}`);
+    return this.http.delete(`http://localhost:3000/tasks/${taskId}`);
   }
 }

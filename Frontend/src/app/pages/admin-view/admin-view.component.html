@@ -1,2 +1,64 @@
-<h2>Admin Dashboard</h2>
-<app-tasks-list></app-tasks-list>
+<div class="admin-view-container">
+  <div class="header">
+    <h2>Admin Dashboard</h2>
+  </div>
+
+  <div class="content">
+    <!-- Benutzerverwaltung -->
+    <div class="user-management">
+      <h3>Benutzerverwaltung</h3>
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Rolle</th>
+            <th>Aktionen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+              <select [(ngModel)]="user.role" (change)="updateUserRole(user)">
+                <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+              </select>
+            </td>
+            <td>
+              <button class="btn delete-btn" (click)="deleteUser(user.id)">Löschen</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Benutzer hinzufügen -->
+    <div class="add-user-form">
+      <h3>Neuen Benutzer hinzufügen</h3>
+      <form (ngSubmit)="addUser()">
+        <label>
+          Name:
+          <input [(ngModel)]="newUser.name" name="name" required />
+        </label>
+        <label>
+          Email:
+          <input [(ngModel)]="newUser.email" name="email" type="email" required />
+        </label>
+        <label>
+          Passwort:
+          <input [(ngModel)]="newUser.password" name="password" type="password" required />
+        </label>
+        <label>
+          Rolle:
+          <select [(ngModel)]="newUser.role" name="role" required>
+            <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+          </select>
+        </label>
+        <button type="submit">Benutzer hinzufügen</button>
+      </form>
+    </div>
+  </div>
+</div>

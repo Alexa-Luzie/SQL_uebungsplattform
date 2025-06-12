@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TasksService, Task } from '../../tasks.service';
 import { SqlRunnerComponent } from '../../sql-runner/sql-runner.component';
@@ -20,7 +21,7 @@ export class StudentViewComponent implements OnInit {
 
   databases: { id: number; name: string; created: boolean }[] = [];
 
-  constructor(private tasksService: TasksService, private http: HttpClient) {}
+  constructor(private tasksService: TasksService, private http: HttpClient, private router: Router) {}
 
   ngOnInit() {
     this.loading = true;
@@ -39,6 +40,21 @@ export class StudentViewComponent implements OnInit {
       next: (data) => this.databases = data,
       error: () => this.databases = []
     });
+    this.updateTaskStatuses();
+  }
+
+  updateTaskStatuses(): void {
+    this.tasks.forEach(task => {
+      this.http.get<{ taskId: string; status: string }>(`http://localhost:3000/solutions/${task.id}/status`)
+        .subscribe({
+          next: (response) => {
+            task.status = response.status;
+          },
+          error: () => {
+            console.error(`Fehler beim Abrufen des Status für Aufgabe ${task.id}.`);
+          }
+        });
+    });
   }
 
   onTaskSelected(event: Event) {
@@ -46,39 +62,29 @@ export class StudentViewComponent implements OnInit {
     const idx = select.selectedIndex - 1;
     this.selectedTask = idx >= 0 ? this.tasks[idx] : null;
   }
-  // ...existing code...
-  toggleEdit(task: Task) {
-    if (this.selectedTask && this.selectedTask.id === task.id) {
+
+  toggleEdit(task: Task): void {
+    if (this.selectedTask?.id === task.id) {
       this.selectedTask = null;
       return;
     }
 
-    // Prüfen, ob die Task eine Datenbank referenziert
     if (task.database) {
-      // Finde die importierte DB zur Task
       const db = this.databases.find(d => d.name === task.database || d.id === Number(task.database));
-      if (db && db.created) {
+      if (db?.created) {
         this.selectedTask = task;
       } else if (db) {
-        // Wenn sie noch nicht erstellt ist, erstelle sie
         this.http.get<any>(`http://localhost:3000/database/import/${db.id}`).subscribe({
-          next: (res) => {
-            if (res.error) {
-              alert('Fehler beim Erstellen der Datenbank: ' + res.error);
-            } else {
-              this.selectedTask = task;
-              // Optional: Datenbanken neu laden
-              this.http.get<any[]>('http://localhost:3000/upload/databases').subscribe({
-                next: (data) => this.databases = data
-              });
-            }
+          next: () => {
+            db.created = true;
+            this.selectedTask = task;
           },
           error: () => {
             alert('Fehler beim Erstellen der Datenbank!');
           }
         });
       } else {
-        alert('Keine passende importierte SQL-Datei für diese Aufgabe gefunden!');
+        alert('Keine passende Datenbank gefunden!');
       }
     } else {
       this.selectedTask = task;
@@ -90,6 +96,52 @@ export class StudentViewComponent implements OnInit {
       return this.tasks.findIndex((t: Task) => t.id === task.id) + 1;
     }
     return i + 1;
+  }
+
+  submitTask(taskId: string): void {
+    this.http.post<{ message: string; status: string }>(`http://localhost:3000/solutions/${taskId}/submit`, {}).subscribe({
+      next: (response) => {
+        console.log(response.message);
+        const task = this.tasks.find(t => t.id === taskId);
+        if (task) {
+          task.status = response.status; // Status aus der Backend-Antwort setzen
+        }
+        this.router.navigate(['/student-view']); // Zurück zur Übersicht navigieren
+      },
+      error: (err) => {
+        console.error(`Fehler beim Abgeben der Aufgabe ${taskId}:`, err.message);
+      }
+    });
+  }
+
+  editTask(taskId: string): void {
+    const task = this.tasks.find(t => t.id === taskId);
+    if (task) {
+      this.selectedTask = task;
+      console.log(`Bearbeiten der Aufgabe mit ID ${taskId}`);
+    }
+  }
+
+  cancelTask(taskId: string): void {
+    if (this.selectedTask?.id === taskId) {
+      this.selectedTask = null;
+      console.log(`Bearbeiten der Aufgabe mit ID ${taskId} abgebrochen.`);
+    }
+  }
+
+  getStatusLabel(status: string | undefined): string {
+    switch (status) {
+      case 'in bearbeitung':
+        return 'In Bearbeitung';
+      case 'fertig':
+        return 'Abgeschlossen';
+      default:
+        return 'Offen';
+    }
+  }
+
+  isTaskCompleted(task: Task): boolean {
+    return task.status === 'fertig'; // Überprüft, ob die Aufgabe abgeschlossen ist
   }
 }
 

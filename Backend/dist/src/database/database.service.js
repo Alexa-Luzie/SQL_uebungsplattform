@@ -72,7 +72,7 @@ let DatabaseService = class DatabaseService {
         try {
             await client.connect();
             const res = await client.query('SELECT 1 FROM pg_database WHERE datname = $1', [dbName]);
-            return res.rowCount > 0;
+            return (res.rowCount ?? 0) > 0;
         }
         finally {
             await client.end();

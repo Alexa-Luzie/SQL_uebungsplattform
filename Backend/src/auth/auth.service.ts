@@ -56,8 +56,11 @@ export class AuthService {
         throw new UnauthorizedException('Ungültige E-Mail oder Passwort.');
       }
 
-    const payload = { sub: user.id, email: user.email, name: user.name, rolle: user.rolle };
-    const token = this.jwtService.sign(payload);
+      const payload = { sub: user.id, email: user.email, name: user.name, rolle: user.rolle };
+      const token = this.jwtService.sign(payload);
+
+      // Ausgabe des Tokens in der Konsole
+      console.log(`Generated Token for ${dto.email}: ${token}`);
 
       console.log(`Login erfolgreich für Benutzer: ${dto.email}`);
       return { access_token: token };

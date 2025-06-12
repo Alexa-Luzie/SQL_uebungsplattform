@@ -3,8 +3,10 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';  // Dein Haupt-Modul
 import * as cors from 'cors';  // Optional: Falls du das 'cors' Paket verwenden möchtest 
+import * as dotenv from 'dotenv';
 
 async function bootstrap() {
+  dotenv.config(); // Lade die .env-Datei
   const app = await NestFactory.create(AppModule);
 
   // Wenn du das cors-Paket verwendest:

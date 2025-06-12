@@ -18,44 +18,14 @@ import { DozentenViewComponent } from './pages/dozenten-view/dozenten-view.compo
 import { AdminViewComponent } from './pages/admin-view/admin-view.component';
 
 export const routes: Routes = [
-  { 
-    path: '', 
-    redirectTo: 'login',
-    pathMatch: 'full' 
-  },
-  { 
-    path: 'login', 
-    component: LoginComponent 
-  },
-  { 
-    path: 'register', 
-    component: RegisterComponent 
-  },
-  { 
-    path: 'profile', 
-    component: ProfileComponent, 
-    canActivate: [AuthGuard] 
-  },
-  { 
-    path: 'student-view', 
-    component: StudentViewComponent, 
-    canActivate: [AuthGuard] 
-  },
-  { 
-    path: 'tutor-view', 
-    component: TutorViewComponent, 
-    canActivate: [AuthGuard] 
-  },
-  { 
-    path: 'dozenten-view', 
-    component: DozentenViewComponent, 
-    canActivate: [AuthGuard] 
-  },
-  { 
-    path: 'admin-view', 
-    component: AdminViewComponent, 
-    canActivate: [AuthGuard] 
-  },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'student-view', component: StudentViewComponent, canActivate: [AuthGuard] },
+  { path: 'tutor-view', component: TutorViewComponent, canActivate: [AuthGuard] },
+  { path: 'dozenten-view', component: DozentenViewComponent, canActivate: [AuthGuard] },
+  { path: 'admin-view', component: AdminViewComponent, canActivate: [AuthGuard] },
   {
     path: 'tasks',
     loadComponent: () =>
@@ -65,7 +35,8 @@ export const routes: Routes = [
   { 
     path: 'sql-upload', 
     component: SqlUploadComponent, 
-    canActivate: [AuthGuard, RoleGuard] 
+    canActivate: [AuthGuard, RoleGuard], 
+    data: { roles: ['TUTOR', 'DOZENT'] } // Erlaubte Rollen
   },
   { 
     path: 'home', 

@@ -1,50 +1,42 @@
 <div class="studentview-main-container">
   <div class="platform-title">SQL-Übungsplattform</div>
 
-<div *ngIf="loading">Lade Aufgaben...</div>
-<div *ngIf="error" class="error">{{ error }}</div>
+  <div *ngIf="loading">Lade Aufgaben...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
 
-<div *ngIf="!loading && tasks.length > 0">
-  <table class="task-table">
-    <thead>
-      <tr>
-        <th>Nr.</th>
-        <th>Task Name</th>
-        <th>Status</th>
-        <th>Aktion</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let task of selectedTask ? [selectedTask] : tasks; let i = index">
-        <td>{{ getTaskIndex(task, i) }}</td>
-        <td>{{ task.title }}</td>
-        <td>
-          <ng-container *ngIf="selectedTask?.id === task.id; else offenStatus">
-            In Bearbeitung
-          </ng-container>
-          <ng-template #offenStatus>
-            Offen
-          </ng-template>
-        </td>
-        <td>
-          <button (click)="toggleEdit(task)">
-            {{ selectedTask?.id === task.id ? 'Bearbeiten abbrechen' : 'Bearbeiten' }}
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-
-<ng-container *ngIf="selectedTask">
-  <div class="task-description-box">
-    <h3>Aufgabenstellung:</h3>
-    <div class="task-description-text">{{ selectedTask.description }}</div>
+  <div *ngIf="!loading && tasks.length > 0">
+    <table class="task-table">
+      <thead>
+        <tr>
+          <th>Nr.</th>
+          <th>Task Name</th>
+          <th>Status</th>
+          <th>Aktion</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ task.title }}</td>
+          <td>{{ getStatusLabel(task.status) }}</td>
+          <td>
+            <button *ngIf="!isTaskCompleted(task) && selectedTask?.id !== task.id" (click)="editTask(task.id)">Bearbeiten</button>
+            <button *ngIf="!isTaskCompleted(task) && selectedTask?.id === task.id" (click)="cancelTask(task.id)">Abbrechen</button>
+            <button *ngIf="isTaskCompleted(task)" (click)="submitTask(task.id)">Abgeben</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <div class="studentview-flex-row">
-    <app-sql-runner [task]="selectedTask"></app-sql-runner>
-    <app-db-visualization [dbId]="selectedTask.database"></app-db-visualization>
-  </div>
-</ng-container>
+
+  <ng-container *ngIf="selectedTask">
+    <div class="task-description-box">
+      <h3>Aufgabenstellung:</h3>
+      <div class="task-description-text">{{ selectedTask.description }}</div>
+    </div>
+    <div class="studentview-flex-row">
+      <app-sql-runner [task]="selectedTask"></app-sql-runner>
+      <app-db-visualization *ngIf="selectedTask?.database !== undefined" [dbId]="selectedTask.database || null"></app-db-visualization>
+    </div>
+  </ng-container>
 </div>

@@ -1,29 +1,36 @@
-  <!-- SQL-Upload-Button und Login-Status entfernt -->
+<!-- SQL-Upload-Button und Login-Status entfernt -->
 
 <!-- Globale Button-Leiste oben rechts -->
 <div class="global-btn-bar">
-  <button class="home-btn-global" (click)="onHomeClick()">
-    <img src="home.png" alt="home" class="home-btn-icon" />
-  </button>
-  <button *ngIf="isLoggedIn" class="profile-btn" (click)="goToProfile()">Profil</button>
-  <button *ngIf="!isLoggedIn" class="profile-btn" (click)="goToLogin()">Login</button>
-
-  <!-- Dashboard-Buttons je nach Rolle -->
-  <button *ngIf="isLoggedIn && role === 'STUDENT'" routerLink="/student-view">Student Dashboard</button>
-  <button *ngIf="isLoggedIn && role === 'TUTOR'" routerLink="/tutor-view">Tutor Dashboard</button>
-  <button *ngIf="isLoggedIn && role === 'DOZENT'" routerLink="/dozenten-view">Dozenten Dashboard</button>
-  <button *ngIf="isLoggedIn && role === 'ADMIN'" routerLink="/admin-view">Admin Dashboard</button>
-
-  <!-- Aufgabenverwaltung-Button nur für Lehrende/Tutoren/Admins -->
-  <button *ngIf="isLoggedIn && (role === 'TUTOR' || role === 'ADMIN' || role === 'DOZENT')" class="tasks-btn" routerLink="/tasks">
-    Aufgabenverwaltung
-  </button>
-  <!-- SQL-Upload-Button für Lehrende/Tutoren/Admins -->
-  <button *ngIf="isLoggedIn && (role === 'TUTOR' || role === 'ADMIN' || role === 'DOZENT')" class="tasks-btn" routerLink="/sql-upload">
-    SQL-Upload
-  </button>
+  
 </div>
 
-<router-outlet></router-outlet>
+<!-- Hamburger-Menü -->
+<div class="global-navbar">
+  <nav class="navbar">
+
+    <!-- Seitliches Hamburger-Menü -->
+    <div class="hamburger-menu" [class.open]="menuOpen">
+      <div class="menu-content">
+        <a routerLink="/home" (click)="closeMenu()">🏠 Home</a>
+        <a *ngIf="isLoggedIn" routerLink="/profile" (click)="closeMenu()">👤 Profil</a>
+        <a *ngIf="!isLoggedIn" routerLink="/login" (click)="closeMenu()">🔑 Login</a>
+        <a *ngIf="isLoggedIn && role === 'STUDENT'" routerLink="/student-view" (click)="closeMenu()">📚 Student Dashboard</a>
+        <a *ngIf="isLoggedIn && role === 'TUTOR'" routerLink="/tutor-view" (click)="closeMenu()">👨‍🏫 Tutor Dashboard</a>
+        <a *ngIf="isLoggedIn && role === 'DOZENT'" routerLink="/dozenten-view" (click)="closeMenu()">📋 Dozenten Dashboard</a>
+        <a *ngIf="isLoggedIn && role === 'ADMIN'" routerLink="/admin-view" (click)="closeMenu()">⚙️ Admin Dashboard</a>
+        <a *ngIf="isLoggedIn && (role === 'TUTOR' || role === 'ADMIN' || role === 'DOZENT')" routerLink="/tasks" (click)="closeMenu()">📝 Aufgabenverwaltung</a>
+        <a *ngIf="isLoggedIn && (role === 'TUTOR' || role === 'ADMIN' || role === 'DOZENT')" routerLink="/sql-upload" (click)="closeMenu()">📤 SQL-Upload</a>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<!-- Hauptinhalt -->
+<div class="main-content">
+  <div class="content-wrapper">
+    <router-outlet></router-outlet>
+  </div>
+</div>
 
 

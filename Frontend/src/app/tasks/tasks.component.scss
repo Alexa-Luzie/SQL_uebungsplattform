@@ -1,7 +1,9 @@
 .container {
+  margin: 20px 20px 20px 20px; /* Abstand zur oberen Leiste reduziert */
   padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .status-bar {
@@ -15,16 +17,100 @@
 }
 
 h1 {
-  font-size: 2em;
-  margin-bottom: 30px;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 2.5rem;
 }
 
 h2 {
-  font-size: 1.5em;
-  margin: 20px 0;
+  text-align: center;
+  font-size: 2rem;
+  color: #1976d2;
 }
 
 .test-status {
   color: green;
   margin: 15px 0;
+}
+
+.tasks-container {
+  margin: 20px 20px 20px 20px; /* Abstand zur oberen Leiste reduziert */
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header h2 {
+  font-size: 2rem;
+  color: #1976d2;
+}
+
+.tasks-section {
+  margin-bottom: 2rem;
+}
+
+.sql-runner-section {
+  margin-top: 20px;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sql-runner-section h2 {
+  font-size: 1.5rem;
+  color: #1976d2;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.progress-section {
+  margin-top: 2rem;
+}
+
+.progress-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.progress-table th,
+.progress-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.progress-table th {
+  background-color: #1976d2;
+  color: white;
+  font-weight: bold;
+}
+
+.progress-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.progress-table tr:hover {
+  background-color: #ddd;
+}
+
+.loading-message {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+  margin-top: 2rem;
+}
+
+.error-message {
+  text-align: center;
+  font-size: 1.2rem;
+  color: red;
+  margin-top: 2rem;
 }

@@ -1,18 +1,25 @@
-<div class="profile-header">
-  <h2>Profil</h2>
-</div>
-<div class="profile-content">
-  <div *ngIf="loading">Lade dein Profil...</div>
-  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-  <div *ngIf="!loading && !errorMessage">
-    <h3>Willkommen, {{ user?.name }}</h3>
-    <p>Email: {{ user?.email }}</p>
-    <p>Rolle: {{ user?.rolle }}</p>
-    <button (click)="logout()">Logout</button>
-    <button *ngIf="!loading && !errorMessage && (user?.rolle === 'admin' || user?.rolle === 'tutor')"
-            routerLink="/sql-upload" class="profile-btn">
-      SQL-Datei hochladen
-    </button>
+<div class="profile-container">
+  <div class="profile-header">
+    <h2>Profil</h2>
+  </div>
+  <div class="profile-content">
+    <div *ngIf="loading" class="loading-message">Lade dein Profil...</div>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <div *ngIf="!loading && !errorMessage">
+      <h3>Willkommen, {{ user?.name }}</h3>
+      <p><strong>Email:</strong> {{ user?.email }}</p>
+      <p><strong>Rolle:</strong> {{ user?.rolle }}</p>
+      <div class="profile-actions">
+        <button class="btn logout-btn" (click)="logout()">Logout</button>
+        <button
+          *ngIf="user?.rolle === 'admin' || user?.rolle === 'tutor'"
+          routerLink="/sql-upload"
+          class="btn upload-btn"
+        >
+          SQL-Datei hochladen
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 

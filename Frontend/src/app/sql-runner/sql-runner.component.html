@@ -1,51 +1,37 @@
+<div class="sql-runner-container">
+  <div class="sql-query-box">
+    <div class="sql-query-header">SQL-Abfrage ausführen</div>
+    <textarea
+      class="sql-query-textarea"
+      [(ngModel)]="sqlQuery"
+      rows="7"
+      placeholder="Geben Sie hier Ihre SQL-Abfrage ein..."
+    ></textarea>
+    <button class="sql-query-btn" (click)="ausfuehren()">Ausführen</button>
+  </div>
 
-<div class="sql-query-box">
-  <div class="sql-query-header">SQL-Abfrage ausführen</div>
-  <textarea class="sql-query-textarea" [(ngModel)]="sqlQuery" rows="7" placeholder="Geben Sie hier Ihre SQL-Abfrage ein..."></textarea>
-  <button class="sql-query-btn" (click)="ausfuehren()">Ausführen</button>
-</div>
+  <div *ngIf="feedbackMessage" class="feedback-message" [class.correct]="isCorrect" [class.incorrect]="isCorrect === false">
+    {{ feedbackMessage }}
+  </div>
 
+  <div *ngIf="hasResultData()" class="result-section">
+    <h4>Ergebnis:</h4>
+    <table class="result-table">
+      <thead>
+        <tr>
+          <th *ngFor="let key of getKeys(result[0])">{{ key }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of result">
+          <td *ngFor="let key of getKeys(row)">{{ row[key] }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-<div *ngIf="hasResultData()">
-  <h4>Ergebnis:</h4>
-  <style>
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background-color: #388e3c; /* Grün */
-      color: white;
-      font-weight: normal; /* Non-bold text */
-    }
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    tr:hover {
-      background-color: #ddd;
-    }
-  </style>
-  <table>
-    <thead>
-      <tr>
-        <th *ngFor="let key of getKeys(result[0])">{{ key }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let row of result">
-        <td *ngFor="let key of getKeys(row)">{{ row[key] }}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div *ngIf="error" style="color: red;">
-  {{ error }}
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
 </div>
 

@@ -1,7 +1,6 @@
-
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service'; 
-import { User } from '@prisma/client';
+import { User, Rolle } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -26,8 +25,7 @@ export class UsersService {
     });
   }
 
-
-    async findAll(): Promise<any[]> {
+  async findAll(): Promise<any[]> {
     return this.prisma.user.findMany({
       select: {
         id: true,
@@ -47,5 +45,19 @@ export class UsersService {
       select: { rolle: true }
     });
     return user?.rolle || null;
+  }
+
+  // Benutzerrolle aktualisieren
+  async updateRole(id: string, role: string) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException(`Benutzer mit ID ${id} wurde nicht gefunden.`);
+    }
+
+    return this.prisma.user.update({
+      where: { id },
+      data: { rolle: role as Rolle },
+    });
   }
 }

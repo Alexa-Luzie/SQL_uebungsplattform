@@ -1,1 +1,13 @@
-<p> test</p>
+<div class="home-container">
+  <h1>Willkommen zur SQL Übungsplattform</h1>
+  <p>
+    Vertiefen Sie Ihre SQL-Kenntnisse mit interaktiven Übungen und personalisierten Dashboards.
+  </p>
+  <div class="cta-buttons">
+    <button class="cta-btn primary-btn" routerLink="/profile">Profil ansehen</button>
+    <button class="cta-btn secondary-btn" routerLink="/student-view" *ngIf="role === 'STUDENT'">Student Dashboard</button>
+    <button class="cta-btn secondary-btn" routerLink="/tutor-view" *ngIf="role === 'TUTOR'">Tutor Dashboard</button>
+    <button class="cta-btn secondary-btn" routerLink="/dozenten-view" *ngIf="role === 'DOZENT'">Dozenten Dashboard</button>
+    <button class="cta-btn secondary-btn" routerLink="/admin-view" *ngIf="role === 'ADMIN'">Admin Dashboard</button>
+  </div>
+</div>

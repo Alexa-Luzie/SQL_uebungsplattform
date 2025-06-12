@@ -1,19 +1,21 @@
-<div class="login-header">
-  <h2>Login</h2>
-</div>
-<form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login-form">
-  <label for="email">E-Mail</label>
-  <input id="email" name="email" type="email" [(ngModel)]="email" required autocomplete="username" />
+<div class="login-container">
+  <div class="login-header">
+    <h2>Login</h2>
+  </div>
+  <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login-form">
+    <label for="email">E-Mail</label>
+    <input id="email" name="email" type="email" [(ngModel)]="email" required autocomplete="username" />
 
-  <label for="password">Passwort</label>
-  <input id="password" name="password" type="password" [(ngModel)]="password" required autocomplete="current-password" />
+    <label for="password">Passwort</label>
+    <input id="password" name="password" type="password" [(ngModel)]="password" required autocomplete="current-password" />
 
-  <button type="submit">Login</button>
-</form>
-<div class="login-links">
-  <button (click)="goToRegister()" class="link-btn">Sie haben noch kein Konto?</button>
-  <a href="http://localhost:4200" class="home-link">
-    <img src="home.png" alt="home" />
-    <span>home</span>
-  </a>
+    <button type="submit">Login</button>
+  </form>
+  <div class="login-links">
+    <button (click)="goToRegister()" class="link-btn">Sie haben noch kein Konto?</button>
+    <a routerLink="/home" class="home-link">
+      <img src="home.png" alt="home" />
+      <span>Home</span>
+    </a>
+  </div>
 </div>

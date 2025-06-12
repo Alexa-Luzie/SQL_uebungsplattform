@@ -1,0 +1,128 @@
+.profile-container {
+  margin: 20px 20px 20px 20px; /* Platz für die obere Leiste (60px Höhe + 40px Abstand) */
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+    font-size: 2rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-header h2 {
+  font-size: 2.5rem;
+  color: #1976d2;
+}
+
+.profile-content {
+  text-align: center;
+}
+
+.loading-message {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.error-message {
+  font-size: 1.2rem;
+  color: red;
+  margin-bottom: 20px;
+}
+
+.profile-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.edit-profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 20px;
+}
+
+label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn {
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background: #155a9c;
+}
+
+.edit-btn {
+  background: #1976d2;
+  color: white;
+}
+
+.edit-btn:hover {
+  background: #1251a3;
+}
+
+.save-btn {
+  background: #388e3c;
+  color: white;
+}
+
+.save-btn:hover {
+  background: #2e7d32;
+}
+
+.cancel-btn {
+  background: #b0b0b0;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background: #8a8a8a;
+}
+
+.logout-btn {
+  background: #d32f2f;
+}
+
+.logout-btn:hover {
+  background: #b71c1c;
+}
+
+.upload-btn {
+  background: #388e3c;
+}
+
+.upload-btn:hover {
+  background: #2e7d32;
+}

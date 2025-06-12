@@ -1,64 +1,78 @@
-<form (ngSubmit)="submit()" *ngIf="!loading" #taskForm="ngForm">
-  <label>
-    Titel:
-    <input 
-      [(ngModel)]="formTask.title" 
-      name="title" 
-      required 
-      minlength="3" 
-      maxlength="100" 
-      #title="ngModel" />
-    <div *ngIf="title.invalid && title.touched" class="error">
-      Titel ist erforderlich und muss zwischen 3 und 100 Zeichen lang sein.
-    </div>
-  </label>
-  
-  <label>
-    Aufgabenstellung:
-    <textarea 
-      [(ngModel)]="formTask.description" 
-      name="description" 
-      required 
-      minlength="10" 
-      maxlength="500" 
-      #description="ngModel"></textarea>
-    <div *ngIf="description.invalid && description.touched" class="error">
-      Beschreibung ist erforderlich und muss zwischen 10 und 500 Zeichen lang sein.
-    </div>
-  </label>
-  
-  <label>
-    Lösung:
-    <textarea 
-      [(ngModel)]="formTask.solution" 
-      name="solution" 
-      required 
-      minlength="5" 
-      maxlength="1000" 
-      #solution="ngModel"></textarea>
-    <div *ngIf="solution.invalid && solution.touched" class="error">
-      Lösung ist erforderlich und muss zwischen 5 und 1000 Zeichen lang sein.
-    </div>
-  </label>
-  
-  <label>
-    Datenbank:
-    <select [(ngModel)]="formTask.database" name="database" required #database="ngModel">
-      <option value="">Keine</option>
-      <option *ngFor="let db of importedDatabases" [value]="db.id">{{ db.name }}</option>
-    </select>
-    <div *ngIf="database.invalid && database.touched" class="error">
-      Datenbank ist erforderlich.
-    </div>
-  </label>
-  
-  <button 
-    type="submit" 
-    [disabled]="taskForm.invalid">
-    {{ formTask.id ? 'Speichern' : 'Erstellen' }}
-  </button>
-  <button type="button" (click)="cancelForm()">Abbrechen</button>
-</form>
+<div class="task-form-container">
+  <div class="header">
+    <h2>{{ formTask.id ? 'Aufgabe bearbeiten' : 'Neue Aufgabe erstellen' }}</h2>
+  </div>
 
-<div *ngIf="loading">Speichere...</div>
-<div *ngIf="error" class="error">{{ error }}</div>
+  <form (ngSubmit)="submit()" *ngIf="!loading" #taskForm="ngForm" class="task-form">
+    <label>
+      Titel:
+      <input 
+        [(ngModel)]="formTask.title" 
+        name="title" 
+        required 
+        minlength="3" 
+        maxlength="100" 
+        #title="ngModel" />
+      <div *ngIf="title.invalid && title.touched" class="error">
+        Titel ist erforderlich und muss zwischen 3 und 100 Zeichen lang sein.
+      </div>
+    </label>
+    
+    <label>
+      Aufgabenstellung:
+      <textarea 
+        [(ngModel)]="formTask.description" 
+        name="description" 
+        required 
+        minlength="10" 
+        maxlength="500" 
+        #description="ngModel"></textarea>
+      <div *ngIf="description.invalid && description.touched" class="error">
+        Beschreibung ist erforderlich und muss zwischen 10 und 500 Zeichen lang sein.
+      </div>
+    </label>
+    
+    <label>
+      Lösung:
+      <textarea 
+        [(ngModel)]="formTask.solution" 
+        name="solution" 
+        required 
+        minlength="5" 
+        maxlength="1000" 
+        #solution="ngModel"></textarea>
+      <div *ngIf="solution.invalid && solution.touched" class="error">
+        Lösung ist erforderlich und muss zwischen 5 und 1000 Zeichen lang sein.
+      </div>
+    </label>
+    
+    <label>
+      Datenbank:
+      <select [(ngModel)]="formTask.database" name="database" required #database="ngModel">
+        <option value="">Keine</option>
+        <option *ngFor="let db of importedDatabases" [value]="db.id">{{ db.name }}</option>
+      </select>
+      <div *ngIf="database.invalid && database.touched" class="error">
+        Datenbank ist erforderlich.
+      </div>
+    </label>
+    
+    <div class="form-actions">
+      <button 
+        type="submit" 
+        [disabled]="taskForm.invalid" 
+        class="btn primary-btn">
+        {{ formTask.id ? 'Speichern' : 'Erstellen' }}
+      </button>
+      <button 
+        type="button" 
+        (click)="cancelForm()" 
+        class="btn secondary-btn">
+        Abbrechen
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="loading" class="loading-message">Speichere...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+</div>

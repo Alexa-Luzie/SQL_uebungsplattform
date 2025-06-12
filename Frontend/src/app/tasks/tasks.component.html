@@ -1,9 +1,11 @@
-<div class="container">
-
+<div class="tasks-container">
   <h1>SQL-Übungsplattform</h1>
   <h2>Verfügbare SQL-Übungen</h2>
   <app-tasks-list (taskSelected)="onTaskSelected($event)"></app-tasks-list>
-  
+
   <!-- Nur für Studenten sichtbar -->
-  <app-sql-runner *ngIf="userRole === 'STUDENT'" [task]="selectedTask"></app-sql-runner>
+  <div *ngIf="userRole === 'STUDENT'" class="sql-runner-section">
+    <h2>SQL-Abfrage ausführen</h2>
+    <app-sql-runner [task]="selectedTask"></app-sql-runner>
+  </div>
 </div>

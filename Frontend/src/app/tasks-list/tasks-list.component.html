@@ -1,38 +1,48 @@
-<div *ngIf="loading">Lade Aufgaben...</div>
-<div *ngIf="error" class="error">{{ error }}</div>
+<div class="tasks-list-container">
+  <div *ngIf="loading" class="loading-message">Lade Aufgaben...</div>
+  <div *ngIf="error" class="error-message">{{ error }}</div>
 
-<!-- Zeige "Keine Aufgaben vorhanden" und "Neue Aufgabe" nur bei der Route /tasks -->
-<div *ngIf="!loading && tasks.length === 0 && !error && isTasksRoute()">Keine Aufgaben vorhanden.</div>
-<button *ngIf="isLehrkraft() && isTasksRoute()" (click)="showForm = true">Neue Aufgabe</button>
+  <!-- Zeige "Keine Aufgaben vorhanden" und "Neue Aufgabe" nur bei der Route /tasks -->
+  <div *ngIf="!loading && tasks.length === 0 && !error && isTasksRoute()" class="no-tasks-message">
+    Keine Aufgaben vorhanden.
+  </div>
+  <button *ngIf="isLehrkraft() && isTasksRoute()" (click)="showForm = true" class="btn primary-btn">
+    Neue Aufgabe
+  </button>
 
-<!-- Dropdown-Menü für Studierende, Liste für Lehrkräfte -->
-<ng-container *ngIf="!loading && tasks.length > 0">
-  <ng-container *ngIf="!isLehrkraft(); else lehrkraftList">
-    <label for="taskSelect">Aufgabe auswählen:</label>
-    <select id="taskSelect" (change)="onDropdownChange($event)">
-      <option value="">Bitte Aufgabe wählen</option>
-      <option *ngFor="let task of tasks" [value]="task.id">{{ task.title }}</option>
-    </select>
-    <div *ngIf="selectedTask">
-      <strong>Beschreibung:</strong>
-      <div>{{ selectedTask.description }}</div>
-    </div>
+  <!-- Dropdown-Menü für Studierende, Liste für Lehrkräfte -->
+  <ng-container *ngIf="!loading && tasks.length > 0">
+    <ng-container *ngIf="!isLehrkraft(); else lehrkraftList">
+      <label for="taskSelect">Aufgabe auswählen:</label>
+      <select id="taskSelect" (change)="onDropdownChange($event)" class="dropdown">
+        <option value="">Bitte Aufgabe wählen</option>
+        <option *ngFor="let task of tasks" [value]="task.id">{{ task.title }}</option>
+      </select>
+      <div *ngIf="selectedTask" class="task-details">
+        <strong>Beschreibung:</strong>
+        <div>{{ selectedTask.description }}</div>
+      </div>
+    </ng-container>
+    <ng-template #lehrkraftList>
+      <ul class="tasks-list">
+        <li *ngFor="let task of tasks" (click)="selectTask(task)" class="task-item">
+          <strong>{{ task.title }}</strong> – {{ task.description }}
+          <div class="task-actions">
+            <button *ngIf="isLehrkraft()" (click)="onEdit(task); $event.stopPropagation()" class="btn edit-btn">
+              Bearbeiten
+            </button>
+            <button (click)="onDelete(task.id); $event.stopPropagation()">Löschen</button>
+          </div>
+        </li>
+      </ul>
+    </ng-template>
   </ng-container>
-  <ng-template #lehrkraftList>
-    <ul>
-      <li *ngFor="let task of tasks" (click)="selectTask(task)">
-        <strong>{{ task.title }}</strong> – {{ task.description }}
-        <button *ngIf="isLehrkraft()" (click)="onEdit(task); $event.stopPropagation()">Bearbeiten</button>
-        <button *ngIf="isLehrkraft()" (click)="onDelete(task.id); $event.stopPropagation()">Löschen</button>
-      </li>
-    </ul>
-  </ng-template>
-</ng-container>
 
-<app-task-form
-  *ngIf="showForm"
-  [task]="editTask"
-  (taskCreated)="onTaskCreated($event)"
-  (taskUpdated)="onTaskUpdated($event)"
-  (cancel)="onCancel()"
-></app-task-form>
+  <app-task-form
+    *ngIf="showForm"
+    [task]="editTask"
+    (taskCreated)="onTaskCreated($event)"
+    (taskUpdated)="onTaskUpdated($event)"
+    (cancel)="onCancel()"
+  ></app-task-form>
+</div>

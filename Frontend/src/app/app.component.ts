@@ -9,7 +9,13 @@ import { of } from 'rxjs';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, RouterLink, RouterLinkActive, FormsModule],
+  imports: [
+    RouterOutlet,
+    CommonModule,
+    RouterLink,
+    RouterLinkActive,
+    FormsModule,
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
@@ -17,6 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'angular-de-tutorial';
   isLoggedIn = false;
   role: string | null = null;
+  menuOpen = false;
 
   constructor(private auth: AuthDataService, public router: Router) {}
 
@@ -81,4 +88,12 @@ export class AppComponent implements OnInit, OnDestroy {
   logoutOnUnload = () => {
     this.auth.logout(); // Diese Methode sollte das Token entfernen!
   };
+
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenu() {
+    this.menuOpen = false;
+  }
 }

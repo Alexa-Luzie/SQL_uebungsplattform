@@ -74,12 +74,22 @@ export class TasksListComponent implements OnInit {
     this.showForm = true;
   }
 
-  onDelete(id?: number) {
-    if (!id) return;
+  onDelete(taskId: string): void {
+    const numericTaskId = Number(taskId); // Konvertiere taskId zu einer Zahl
+    if (isNaN(numericTaskId)) {
+      console.error('Ungültige Task-ID:', taskId);
+      return;
+    }
     if (confirm('Wirklich löschen?')) {
-      this.tasksService.deleteTask(id).subscribe({
-        next: () => this.loadTasks(),
-        error: () => this.error = 'Fehler beim Löschen'
+      this.tasksService.deleteTask(numericTaskId).subscribe({
+        next: () => {
+          console.log(`Task mit ID ${numericTaskId} erfolgreich gelöscht`);
+          this.loadTasks();
+        },
+        error: (err) => {
+          console.error('Fehler beim Löschen des Tasks:', err);
+          this.error = 'Fehler beim Löschen des Tasks';
+        }
       });
     }
   }

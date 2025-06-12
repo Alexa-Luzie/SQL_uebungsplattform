@@ -44,7 +44,7 @@ export class TaskFormComponent implements OnChanges {
     const { id, ...payload } = this.formTask;
     if (this.task && this.task.id) {
       // Bearbeiten
-      this.tasksService.updateTask(this.task.id, payload).subscribe({
+      this.tasksService.updateTask(Number(this.task.id), payload).subscribe({
         next: (updated) => {
           this.loading = false;
           this.taskUpdated.emit(updated);
