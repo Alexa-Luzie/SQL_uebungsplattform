@@ -23,7 +23,7 @@
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
             <td>
-              <select [(ngModel)]="user.role" (change)="updateUserRole(user)">
+              <select [(ngModel)]="user.rolle" (change)="updateUserRole(user)">
                 <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
               </select>
             </td>
@@ -53,7 +53,7 @@
         </label>
         <label>
           Rolle:
-          <select [(ngModel)]="newUser.role" name="role" required>
+          <select [(ngModel)]="newUser.rolle" name="rolle" required>
             <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
           </select>
         </label>

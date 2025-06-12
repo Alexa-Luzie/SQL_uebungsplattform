@@ -14,7 +14,7 @@ export class AdminViewComponent implements OnInit {
   users: any[] = []; // Liste der Benutzer
   roles: string[] = ['admin', 'tutor', 'student']; // Verfügbare Rollen
   apiUrl: string = 'http://localhost:3000'; // Beispiel-API-URL
-  newUser = { name: '', email: '', role: 'student', password: '' }; // Für das Hinzufügen neuer Benutzer
+  newUser = { name: '', email: '', rolle: 'student', password: '' }; // Für das Hinzufügen neuer Benutzer
 
   constructor(private http: HttpClient) {}
 
@@ -36,7 +36,7 @@ export class AdminViewComponent implements OnInit {
 
   // Rolle eines Benutzers aktualisieren
   updateUserRole(user: any): void {
-    this.http.put(`${this.apiUrl}/users/${user.id}/role`, { role: user.role }).subscribe({
+    this.http.put(`${this.apiUrl}/users/${user.id}/role`, { rolle: user.rolle }).subscribe({
       next: () => {
         alert(`Rolle von ${user.name} erfolgreich aktualisiert!`);
       },
@@ -70,10 +70,12 @@ export class AdminViewComponent implements OnInit {
       return;
     }
 
+    console.log('DEBUG: Gesendete Daten:', this.newUser); // Debugging: Überprüfe die gesendeten Daten
+
     this.http.post(`${this.apiUrl}/users`, this.newUser).subscribe({
       next: () => {
         alert('Benutzer erfolgreich hinzugefügt!');
-        this.newUser = { name: '', email: '', role: 'student', password: '' }; // Formular zurücksetzen
+        this.newUser = { name: '', email: '', rolle: 'STUDENT', password: '' }; // Formular zurücksetzen
         this.loadUsers(); // Benutzerliste neu laden
       },
       error: (error) => {

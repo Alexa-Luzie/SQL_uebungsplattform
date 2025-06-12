@@ -27,6 +27,7 @@ export class AuthService {
         email: registerDto.email,
         name: registerDto.name,
         password: hashedPassword,
+        rolle: 'STUDENT', // Standardrolle hinzufügen (z. B. 'STUDENT')
       });
 
       console.log(`Registrierung erfolgreich: ${user.email}`);

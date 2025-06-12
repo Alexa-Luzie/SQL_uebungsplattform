@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service'; 
 import { User, Rolle } from '@prisma/client';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
@@ -13,9 +14,20 @@ export class UsersService {
     });
   }
 
-  async create(data: { email: string; name: string; password: string }): Promise<User> {
+  async create(data: { email: string; name: string; password: string; rolle: string }): Promise<User> {
+    console.log('DEBUG: Benutzer erstellt:', data);
+
+    const rolle = data.rolle.toUpperCase();
+
+    // Hash the password before saving
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
     return this.prisma.user.create({
-      data,
+      data: {
+        ...data,
+        rolle: rolle as Rolle,
+        password: hashedPassword,
+      },
     });
   }
 

@@ -1,10 +1,11 @@
-import { Controller, Get, Patch, Param, Body, Request, UseGuards, ForbiddenException } from '@nestjs/common';
+import { Controller, Get, Patch, Param, Body, Request, UseGuards, ForbiddenException, Post } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   // Aktuellen Benutzer abrufen
   @UseGuards(AuthGuard('jwt'))
@@ -45,5 +46,18 @@ export class UsersController {
       throw new ForbiddenException('Nur für Admins erlaubt');
     }
     return this.usersService.updateRole(id, role);
+  }
+
+  @Post()
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    try {
+      console.log('DEBUG: Empfangene Daten:', createUserDto);
+      const newUser = await this.usersService.create(createUserDto);
+      console.log('DEBUG: Benutzer erfolgreich erstellt:', newUser);
+      return newUser;
+    } catch (error) {
+      console.error('ERROR: Fehler beim Erstellen des Benutzers:', error.message);
+      throw error;
+    }
   }
 }
