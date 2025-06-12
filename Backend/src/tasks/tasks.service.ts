@@ -32,7 +32,10 @@ export class TasksService {
     });
   }
 
-  remove(id: number) {
+  async remove(id: number) {
+    // Zuerst alle Submissions zur Task löschen
+    await this.prisma.submission.deleteMany({ where: { taskId: id } });
+    // Dann die Task selbst löschen
     return this.prisma.task.delete({ where: { id } });
   }
 }

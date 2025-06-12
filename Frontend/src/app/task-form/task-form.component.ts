@@ -42,6 +42,10 @@ export class TaskFormComponent implements OnChanges {
   submit() {
     this.loading = true;
     const { id, ...payload } = this.formTask;
+    // Datenbank-ID immer als String senden
+    if (payload.database !== undefined && payload.database !== null) {
+      payload.database = String(payload.database);
+    }
     if (this.task && this.task.id) {
       // Bearbeiten
       this.tasksService.updateTask(Number(this.task.id), payload).subscribe({
