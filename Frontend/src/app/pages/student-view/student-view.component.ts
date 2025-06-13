@@ -122,14 +122,30 @@ export class StudentViewComponent implements OnInit {
   }
 
   submitTask(taskId: string): void {
-    this.http.post<{ message: string; status: string }>(`http://localhost:3000/solutions/${taskId}/submit`, {}).subscribe({
+    const userId = localStorage.getItem('userId'); // Dynamische User-ID
+    if (!userId) {
+      console.error('Fehler: Keine User-ID gefunden.');
+      return;
+    }
+
+    const solution = {
+      taskId: String(taskId),
+      userId: userId,
+      solutionQuery: 'SELECT * FROM users;', // Beispiel-Abfrage, dynamisch ersetzen
+      isCorrect: true // Beispielwert, dynamisch ersetzen
+    };
+
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem('token')}` // JWT-Token aus dem LocalStorage
+    };
+
+    this.http.post<{ message: string; status: string }>('http://localhost:3000/solutions', solution, { headers }).subscribe({
       next: (response: { message: string; status: string }) => {
         console.log(response.message);
         const task = this.tasks.find((t: Task) => t.id === taskId);
         if (task) {
           task.status = response.status; // Status aus der Backend-Antwort setzen
         }
-        // Optional: Seite neu laden oder zur Übersicht navigieren
       },
       error: (err: any) => {
         console.error(`Fehler beim Abgeben der Aufgabe ${taskId}:`, err.message);

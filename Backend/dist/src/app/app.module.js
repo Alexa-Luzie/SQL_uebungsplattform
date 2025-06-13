@@ -18,6 +18,8 @@ const sql_runner_module_1 = require("../sql-runner/sql-runner.module");
 const database_module_1 = require("../database/database.module");
 const tasks_module_1 = require("../tasks/tasks.module");
 const upload_module_1 = require("../upload/upload.module");
+const student_progress_module_1 = require("../student-progress/student-progress.module");
+const solutions_module_1 = require("../solutions/solutions.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -34,6 +36,8 @@ exports.AppModule = AppModule = __decorate([
             upload_module_1.UploadModule,
             sql_runner_module_1.SqlRunnerModule,
             database_module_1.DatabaseModule,
+            student_progress_module_1.StudentProgressModule,
+            solutions_module_1.SolutionsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

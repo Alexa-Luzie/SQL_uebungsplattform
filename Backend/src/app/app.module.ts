@@ -9,6 +9,8 @@ import { SqlRunnerModule } from '../sql-runner/sql-runner.module';
 import { DatabaseModule } from '../database/database.module';
 import { TasksModule } from '../tasks/tasks.module';
 import { UploadModule } from '../upload/upload.module';
+import { StudentProgressModule } from 'src/student-progress/student-progress.module'; 
+import { SolutionsModule } from '../solutions/solutions.module'; // Importiert das SolutionsModule für die Lösungen
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { UploadModule } from '../upload/upload.module';
     UploadModule,
     SqlRunnerModule,
     DatabaseModule,  // Importiert das DatabaseModule für den Datenbankzugriff
+    StudentProgressModule,
+    SolutionsModule,  // Importiert das SolutionsModule für die Lösungen
   ],
   controllers: [AppController],
   providers: [AppService],  

@@ -72,4 +72,14 @@ export class UsersService {
       data: { rolle: role as Rolle },
     });
   }
+
+  async deleteUser(id: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException(`Benutzer mit ID ${id} wurde nicht gefunden.`);
+    }
+
+    return this.prisma.user.delete({ where: { id } });
+  }
 }

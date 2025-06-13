@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Param, Body, Request, UseGuards, ForbiddenException, Post } from '@nestjs/common';
+import { Controller, Get, Patch, Param, Body, Request, UseGuards, ForbiddenException, Post, Delete } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -40,11 +40,7 @@ export class UsersController {
   // Benutzerrolle aktualisieren (nur für Admins)
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id/role')
-  async updateRole(@Param('id') id: string, @Body('role') role: string, @Request() req) {
-    const user = await this.usersService.findById(req.user.userId);
-    if (user.rolle !== 'admin') {
-      throw new ForbiddenException('Nur für Admins erlaubt');
-    }
+  async updateRole(@Param('id') id: string, @Body('role') role: string) {
     return this.usersService.updateRole(id, role);
   }
 
@@ -59,5 +55,11 @@ export class UsersController {
       console.error('ERROR: Fehler beim Erstellen des Benutzers:', error.message);
       throw error;
     }
+  }
+
+  @UseGuards(AuthGuard('jwt')) // Authentifizierung bleibt bestehen
+  @Delete(':id')
+  async deleteUser(@Param('id') id: string) {
+    return this.usersService.deleteUser(id); // Entferne die Admin-Prüfung
   }
 }
