@@ -32,7 +32,6 @@ export class TutorViewComponent implements OnInit {
         this.loading = false;
       },
       error: err => {
-        this.error = 'Fehler beim Laden der Fortschrittsdaten';
         this.loading = false;
       }
     });
