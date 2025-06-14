@@ -1,0 +1,31 @@
+:host ::ng-deep .er-node-template {
+  padding: 10px 12px;
+  font-weight: bold;
+  color: #222;
+  background: #e3eafc;
+  border: 2px solid #1976d2;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 100px;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.07);
+  display: inline-block;
+}
+
+.er-diagram-container {
+  width: 100%;
+  min-height: 700px;
+  background: #f8fafc;
+  border: 1px solid #b3c0d1;
+  border-radius: 10px;
+  margin-top: 18px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.07);
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+:host ::ng-deep vflow {
+  min-height: 350px;
+  background: #f0f4f8;
+  border-radius: 8px;
+}

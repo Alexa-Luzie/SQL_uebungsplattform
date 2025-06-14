@@ -1,0 +1,9 @@
+<div class="er-diagram-container">
+  <vflow [nodes]="nodes" [edges]="edges" [view]="viewSize">
+    <ng-template vflowNodeTemplate="custom" let-node>
+      <div class="er-node-template">
+        {{ node.data?.label }}
+      </div>
+    </ng-template>
+  </vflow>
+</div>
