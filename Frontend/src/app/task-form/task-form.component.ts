@@ -41,7 +41,14 @@ export class TaskFormComponent implements OnChanges {
 
   submit() {
     this.loading = true;
-    const { id, ...payload } = this.formTask;
+    // Nur erlaubte Felder extrahieren
+    const allowedFields = ['title', 'description', 'database', 'solution'];
+    const payload: any = {};
+    for (const key of allowedFields) {
+      if (this.formTask[key as keyof Task] !== undefined) {
+        payload[key] = this.formTask[key as keyof Task];
+      }
+    }
     // Datenbank-ID immer als String senden
     if (payload.database !== undefined && payload.database !== null) {
       payload.database = String(payload.database);
