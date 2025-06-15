@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthDataService } from './auth/auth-data.service';
 import { catchError, filter } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -13,9 +14,9 @@ import { of } from 'rxjs';
     RouterOutlet,
     CommonModule,
     RouterLink,
-    RouterLinkActive,
     FormsModule,
-  ],
+    HttpClientModule
+],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

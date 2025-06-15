@@ -1,8 +1,9 @@
 import { ImportedDatabaseService, ImportedDatabase } from '../services/imported-database.service';
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TasksService, Task } from '../tasks.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-task-form',
@@ -11,8 +12,9 @@ import { TasksService, Task } from '../tasks.service';
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.scss']
 })
-export class TaskFormComponent implements OnChanges {
+export class TaskFormComponent implements OnInit, OnChanges {
   importedDatabases: ImportedDatabase[] = [];
+  allDatabases: any[] = [];
   @Input() task: Task | null = null;
   @Output() taskCreated = new EventEmitter<Task>();
   @Output() taskUpdated = new EventEmitter<Task>();
@@ -24,10 +26,18 @@ export class TaskFormComponent implements OnChanges {
 
   constructor(
     private tasksService: TasksService,
-    private importedDatabaseService: ImportedDatabaseService
-  ) {
-    this.importedDatabaseService.getImportedDatabases().subscribe((dbs) => {
-      this.importedDatabases = dbs;
+    private importedDatabaseService: ImportedDatabaseService,
+    private http: HttpClient
+  ) {}
+
+  ngOnInit() {
+    // Lade importierte und eigene Datenbanken und kombiniere sie
+    this.http.get<any[]>('/api/imported-databases').subscribe((imported: any[]) => {
+      this.http.get<any[]>('/api/custom-databases').subscribe((custom: any[]) => {
+        imported.forEach(db => db.type = 'imported');
+        custom.forEach(db => db.type = 'custom');
+        this.allDatabases = [...imported, ...custom];
+      });
     });
   }
 

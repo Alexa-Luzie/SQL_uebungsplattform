@@ -109,4 +109,9 @@ export class AuthDataService {
     localStorage.removeItem('access_token');
     this.currentUser$.next(null);
   }
+
+  getRole(): string | null {
+    const currentUser = this.getCurrentUserValue();
+    return currentUser ? (currentUser.rolle ?? currentUser.role ?? null) : null;
+  }
 }

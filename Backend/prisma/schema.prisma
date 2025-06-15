@@ -50,6 +50,15 @@ model ImportedDatabase {
   created    Boolean  @default(false)                       // wurde die DB erstellt
 }
 
+model CustomDatabase {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  schema      String   // Das SQL-Schema als Text
+  createdBy   String   // User-ID des Lehrenden (Relation zu User.id)
+  createdAt   DateTime @default(now())
+}
+
 model Submission {
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [id])

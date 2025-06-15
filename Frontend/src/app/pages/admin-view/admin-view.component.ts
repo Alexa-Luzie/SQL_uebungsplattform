@@ -12,9 +12,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class AdminViewComponent implements OnInit {
   users: any[] = []; // Liste der Benutzer
-  roles: string[] = ['admin', 'tutor', 'student', 'dozent']; // Verfügbare Rollen
+  roles: string[] = ['ADMIN', 'TUTOR', 'STUDENT', 'DOZENT']; // Verfügbare Rollen
   apiUrl: string = 'http://localhost:3000'; // Beispiel-API-URL
-  newUser = { name: '', email: '', rolle: 'student', password: '' }; // Für das Hinzufügen neuer Benutzer
+  newUser = { name: '', email: '', rolle: 'STUDENT', password: '' }; // Für das Hinzufügen neuer Benutzer
 
   constructor(private http: HttpClient) {}
 
@@ -36,7 +36,8 @@ export class AdminViewComponent implements OnInit {
 
   // Rolle eines Benutzers aktualisieren
   updateUserRole(user: any): void {
-    this.http.patch(`${this.apiUrl}/users/${user.id}/role`, { role: user.rolle }).subscribe({
+    const neueRolle = user.rolle.toUpperCase(); // Sicherheitshalber
+    this.http.patch(`${this.apiUrl}/users/${user.id}/role`, { rolle: neueRolle }).subscribe({
       next: () => {
         alert(`Rolle von ${user.name} erfolgreich aktualisiert!`);
       },

@@ -1,0 +1,20 @@
+<form (ngSubmit)="onSubmit()" #dbForm="ngForm">
+  <label>
+    Name*:
+    <input type="text" name="name" [(ngModel)]="model.name" required />
+  </label>
+  <br />
+  <label>
+    Beschreibung:
+    <input type="text" name="description" [(ngModel)]="model.description" />
+  </label>
+  <br />
+  <label>
+    SQL-Schema*:
+    <textarea name="schema" [(ngModel)]="model.schema" required rows="6"></textarea>
+  </label>
+  <br />
+  <button type="submit" [disabled]="dbForm.invalid">Anlegen</button>
+</form>
+<div *ngIf="successMsg" style="color: green;">{{ successMsg }}</div>
+<div *ngIf="errorMsg" style="color: red;">{{ errorMsg }}</div>

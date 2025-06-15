@@ -24,3 +24,17 @@
   </button>
   <span class="db-status" *ngIf="dbMessage">{{ dbMessage }}</span>
 </div>
+
+<!-- Button nur für DOZENT, TUTOR, ADMIN -->
+<button
+  *ngIf="role === 'DOZENT' || role === 'TUTOR' || role === 'ADMIN'"
+  class="btn upload-btn"
+  (click)="showCustomDbForm = !showCustomDbForm"
+>
+  Eigene Datenbank anlegen
+</button>
+
+<!-- Formular für eigene Datenbanken (nur wenn showCustomDbForm true ist) -->
+<app-custom-database-form
+  *ngIf="showCustomDbForm && (role === 'DOZENT' || role === 'TUTOR' || role === 'ADMIN')">
+</app-custom-database-form>

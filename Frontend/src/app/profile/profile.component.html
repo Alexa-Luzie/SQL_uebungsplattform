@@ -11,13 +11,6 @@
       <p><strong>Rolle:</strong> {{ user?.rolle }}</p>
       <div class="profile-actions">
         <button class="btn logout-btn" (click)="logout()">Logout</button>
-        <button
-          *ngIf="user?.rolle === 'admin' || user?.rolle === 'tutor'"
-          routerLink="/sql-upload"
-          class="btn upload-btn"
-        >
-          SQL-Datei hochladen
-        </button>
       </div>
     </div>
   </div>

@@ -19,14 +19,11 @@ export class UsersService {
 
     const rolle = data.rolle.toUpperCase();
 
-    // Hash the password before saving
-    const hashedPassword = await bcrypt.hash(data.password, 10);
-
     return this.prisma.user.create({
       data: {
         ...data,
         rolle: rolle as Rolle,
-        password: hashedPassword,
+        password: data.password,
       },
     });
   }

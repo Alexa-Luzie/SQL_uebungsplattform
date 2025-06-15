@@ -50,7 +50,9 @@
       Datenbank:
       <select [(ngModel)]="formTask.database" name="database" required #database="ngModel">
         <option value="">Keine</option>
-        <option *ngFor="let db of importedDatabases" [value]="db.id">{{ db.name }}</option>
+        <option *ngFor="let db of allDatabases" [value]="db.id">
+          {{ db.name }} ({{ db.type === 'imported' ? 'Importiert' : 'Eigen' }})
+        </option>
       </select>
       <div *ngIf="database.invalid && database.touched" class="error">
         Datenbank ist erforderlich.

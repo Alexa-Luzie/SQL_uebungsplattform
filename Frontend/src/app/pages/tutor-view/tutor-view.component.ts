@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TasksListComponent } from '../../tasks-list/tasks-list.component';
 import { HttpClient } from '@angular/common/http';
 
 export interface StudentProgress {
@@ -13,7 +12,7 @@ export interface StudentProgress {
 @Component({
   selector: 'app-tutor-view',
   standalone: true,
-  imports: [CommonModule, TasksListComponent],
+  imports: [CommonModule],
   templateUrl: './tutor-view.component.html',
   styleUrls: ['./tutor-view.component.scss']
 })

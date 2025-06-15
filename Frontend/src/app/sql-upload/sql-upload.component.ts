@@ -2,16 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CustomDatabaseFormComponent } from "../custom-database-form/custom-database-form.component";
+import { AuthDataService } from '../auth/auth-data.service';
 
 
 @Component({
   selector: 'app-sql-upload',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CustomDatabaseFormComponent],
   templateUrl: './sql-upload.component.html',
   styleUrls: ['./sql-upload.component.scss']
 })
 export class SqlUploadComponent implements OnInit {
+  public role: string = '';
+  showCustomDbForm = false;
   selectedFile: File | null = null;
   message = '';
   uploading = false;
@@ -19,10 +23,11 @@ export class SqlUploadComponent implements OnInit {
   selectedDbId: number | null = null;
   dbMessage = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private auth: AuthDataService) {}
 
   ngOnInit() {
     this.loadDatabases();
+    this.role = this.auth.getRole() ?? '';
   }
 
   onFileSelected(event: Event) {
