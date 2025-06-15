@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { CustomDatabaseFormComponent } from "../custom-database-form/custom-database-form.component";
 import { AuthDataService } from '../auth/auth-data.service';
 
-
 @Component({
   selector: 'app-sql-upload',
   standalone: true,
@@ -23,10 +22,16 @@ export class SqlUploadComponent implements OnInit {
   selectedDbId: number | null = null;
   dbMessage = '';
 
+  // NEU: Eigene Datenbanken
+  customDatabases: CustomDatabase[] = [];
+  selectedCustomDbId: number | null = null;
+  selectedDbType: 'imported' | 'custom' | null = null;
+
   constructor(private http: HttpClient, private auth: AuthDataService) {}
 
   ngOnInit() {
     this.loadDatabases();
+    this.loadCustomDatabases(); // NEU
     this.role = this.auth.getRole() ?? '';
   }
 
@@ -69,6 +74,15 @@ export class SqlUploadComponent implements OnInit {
       });
   }
 
+  // NEU: Eigene Datenbanken laden
+  loadCustomDatabases() {
+    this.http.get<CustomDatabase[]>('http://localhost:3000/custom-databases')
+      .subscribe({
+        next: (data) => this.customDatabases = data,
+        error: () => this.customDatabases = []
+      });
+  }
+
   createDatabase() {
     if (!this.selectedDbId) return;
     this.dbMessage = 'Erstelle Datenbank...';
@@ -86,9 +100,35 @@ export class SqlUploadComponent implements OnInit {
       });
   }
 
+  deleteDatabase(type: 'imported' | 'custom', id: number) {
+    let url = '';
+    if (type === 'imported') {
+      url = `http://localhost:3000/imported-databases/${id}`;
+    } else {
+      url = `http://localhost:3000/custom-databases/${id}`;
+    }
+    this.http.delete(url).subscribe({
+      next: () => {
+        this.loadDatabases();
+        this.loadCustomDatabases();
+      },
+      error: () => alert('Fehler beim Löschen!')
+    });
+  }
+
+  // Für Bearbeiten könntest du ein Dialog/Modal öffnen und die Datenbankdaten übergeben
+  editDatabase(type: 'imported' | 'custom', db: any) {
+    // Öffne ein Bearbeitungsformular (z.B. Modal/Dialog)
+    // Übergib db und type
+  }
+
   get selectedDbCreated(): boolean {
     const db = this.databases.find(d => d.id === this.selectedDbId);
     return !!db?.created;
+  }
+
+  get selectedDatabaseId(): number | null {
+    return this.selectedDbType === 'imported' ? this.selectedDbId : this.selectedCustomDbId;
   }
 }
 
@@ -96,4 +136,10 @@ interface ImportedDatabase {
   id: number;
   name: string;
   created: boolean;
+}
+
+// NEU: Interface für eigene Datenbanken
+interface CustomDatabase {
+  id: number;
+  name: string;
 }

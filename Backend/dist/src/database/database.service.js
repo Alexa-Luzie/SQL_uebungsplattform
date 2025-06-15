@@ -80,13 +80,19 @@ let DatabaseService = class DatabaseService {
     }
     async buildDbUrl(dbId) {
         const baseUrl = process.env.DATABASE_URL || '';
-        const importedDb = await this.prisma.importedDatabase.findUnique({ where: { id: Number(dbId) } });
-        if (!importedDb) {
-            throw new Error('ImportedDatabase nicht gefunden');
+        let importedDb = await this.prisma.importedDatabase.findUnique({ where: { id: Number(dbId) } });
+        if (importedDb) {
+            const safeName = (0, sanitize_db_name_1.sanitizeDbName)(importedDb.name);
+            const fullDbName = `imported_${safeName}_${importedDb.id}`;
+            return baseUrl.replace(/(postgres(?:ql)?:\/\/.*?:.*?@.*?:\d+\/)([^?]+)/, `$1${fullDbName}`);
         }
-        const safeName = (0, sanitize_db_name_1.sanitizeDbName)(importedDb.name);
-        const fullDbName = `imported_${safeName}_${importedDb.id}`;
-        return baseUrl.replace(/(postgres(?:ql)?:\/\/.*?:.*?@.*?:\d+\/)([^?]+)/, `$1${fullDbName}`);
+        let customDb = await this.prisma.customDatabase.findUnique({ where: { id: Number(dbId) } });
+        if (customDb) {
+            const safeName = (0, sanitize_db_name_1.sanitizeDbName)(customDb.name);
+            const fullDbName = `custom_${safeName}_${customDb.id}`;
+            return baseUrl.replace(/(postgres(?:ql)?:\/\/.*?:.*?@.*?:\d+\/)([^?]+)/, `$1${fullDbName}`);
+        }
+        throw new Error('Datenbank nicht gefunden');
     }
     async getTemplateDbForTask(taskId) {
         const task = await this.prisma.task.findUnique({ where: { id: Number(taskId) } });

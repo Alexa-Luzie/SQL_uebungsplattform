@@ -6,6 +6,6 @@
   <!-- Nur für Studenten sichtbar -->
   <div *ngIf="userRole === 'STUDENT'" class="sql-runner-section">
     <h2>SQL-Abfrage ausführen</h2>
-    <app-sql-runner [task]="selectedTask"></app-sql-runner>
+    <app-sql-runner [task]="selectedTask" [databaseId]="selectedDatabaseId"></app-sql-runner>
   </div>
 </div>

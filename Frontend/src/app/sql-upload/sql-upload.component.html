@@ -11,18 +11,37 @@
 </div>
 
 <div class="dropdown-container">
+  <label>Datenbank-Typ wählen:</label>
+  <select [(ngModel)]="selectedDbType">
+    <option [ngValue]="null">-- Bitte wählen --</option>
+    <option value="imported">Importierte Datenbank</option>
+    <option value="custom">Eigene Datenbank</option>
+  </select>
+</div>
+
+<div class="dropdown-container" *ngIf="selectedDbType === 'imported'">
   <label for="db-select">Importierte SQL-Datei auswählen:</label>
   <select id="db-select" [(ngModel)]="selectedDbId">
     <option [ngValue]="null">-- Bitte wählen --</option>
     <option *ngFor="let db of databases" [ngValue]="db.id">
       {{ db.name }} (ID: {{ db.id }})
-      <span *ngIf="db.created">✔️</span>
     </option>
   </select>
   <button class="create-db-btn" (click)="createDatabase()" [disabled]="!selectedDbId || selectedDbCreated">
     Datenbank erstellen
   </button>
   <span class="db-status" *ngIf="dbMessage">{{ dbMessage }}</span>
+</div>
+
+<div class="dropdown-container" *ngIf="selectedDbType === 'custom'">
+  <label for="custom-db-select">Eigene Datenbank auswählen:</label>
+  <select id="custom-db-select" [(ngModel)]="selectedCustomDbId">
+    <option [ngValue]="null">-- Bitte wählen --</option>
+    <option *ngFor="let db of customDatabases" [ngValue]="db.id">
+      {{ db.name }} (ID: {{ db.id }})
+    </option>
+  </select>
+  <!-- Kein Button zum Erstellen nötig! -->
 </div>
 
 <!-- Button nur für DOZENT, TUTOR, ADMIN -->
@@ -38,3 +57,37 @@
 <app-custom-database-form
   *ngIf="showCustomDbForm && (role === 'DOZENT' || role === 'TUTOR' || role === 'ADMIN')">
 </app-custom-database-form>
+
+<div *ngIf="role === 'DOZENT' || role === 'TUTOR' || role === 'ADMIN'" class="db-overview">
+  <h3>Alle Datenbanken (Übersicht)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Typ</th>
+        <th>Name</th>
+        <th>ID</th>
+        <th>Aktionen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let db of databases">
+        <td>Importiert</td>
+        <td>{{ db.name }}</td>
+        <td>{{ db.id }}</td>
+        <td>
+          <button (click)="editDatabase('imported', db)">Bearbeiten</button>
+          <button (click)="deleteDatabase('imported', db.id)">Löschen</button>
+        </td>
+      </tr>
+      <tr *ngFor="let db of customDatabases">
+        <td>Eigen</td>
+        <td>{{ db.name }}</td>
+        <td>{{ db.id }}</td>
+        <td>
+          <button (click)="editDatabase('custom', db)">Bearbeiten</button>
+          <button (click)="deleteDatabase('custom', db.id)">Löschen</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

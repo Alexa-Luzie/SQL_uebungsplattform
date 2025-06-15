@@ -1,5 +1,4 @@
-import { ImportedDatabaseService, ImportedDatabase } from '../services/imported-database.service';
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TasksService, Task } from '../tasks.service';
@@ -13,8 +12,6 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./task-form.component.scss']
 })
 export class TaskFormComponent implements OnInit, OnChanges {
-  importedDatabases: ImportedDatabase[] = [];
-  allDatabases: any[] = [];
   @Input() task: Task | null = null;
   @Output() taskCreated = new EventEmitter<Task>();
   @Output() taskUpdated = new EventEmitter<Task>();
@@ -24,16 +21,17 @@ export class TaskFormComponent implements OnInit, OnChanges {
   loading = false;
   error = '';
 
+  allDatabases: any[] = [];
+
   constructor(
     private tasksService: TasksService,
-    private importedDatabaseService: ImportedDatabaseService,
     private http: HttpClient
   ) {}
 
   ngOnInit() {
-    // Lade importierte und eigene Datenbanken und kombiniere sie
-    this.http.get<any[]>('/api/imported-databases').subscribe((imported: any[]) => {
-      this.http.get<any[]>('/api/custom-databases').subscribe((custom: any[]) => {
+    // Beide Datenbanktypen laden und zusammenführen
+    this.http.get<any[]>('http://localhost:3000/imported-databases').subscribe(imported => {
+      this.http.get<any[]>('http://localhost:3000/custom-databases').subscribe(custom => {
         imported.forEach(db => db.type = 'imported');
         custom.forEach(db => db.type = 'custom');
         this.allDatabases = [...imported, ...custom];
@@ -51,20 +49,11 @@ export class TaskFormComponent implements OnInit, OnChanges {
 
   submit() {
     this.loading = true;
-    // Nur erlaubte Felder extrahieren
-    const allowedFields = ['title', 'description', 'database', 'solution'];
-    const payload: any = {};
-    for (const key of allowedFields) {
-      if (this.formTask[key as keyof Task] !== undefined) {
-        payload[key] = this.formTask[key as keyof Task];
-      }
-    }
-    // Datenbank-ID immer als String senden
+    const { id, ...payload } = this.formTask;
     if (payload.database !== undefined && payload.database !== null) {
       payload.database = String(payload.database);
     }
     if (this.task && this.task.id) {
-      // Bearbeiten
       this.tasksService.updateTask(Number(this.task.id), payload).subscribe({
         next: (updated) => {
           this.loading = false;
@@ -76,7 +65,6 @@ export class TaskFormComponent implements OnInit, OnChanges {
         }
       });
     } else {
-      // Neu anlegen
       this.tasksService.createTask(payload as Omit<Task, 'id'>).subscribe({
         next: (created) => {
           this.loading = false;

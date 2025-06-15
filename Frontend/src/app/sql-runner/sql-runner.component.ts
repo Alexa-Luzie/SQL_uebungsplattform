@@ -14,7 +14,7 @@ import { Task } from '../tasks.service';
 })
 export class SqlRunnerComponent {
   @Input() task: Task | null = null;
-
+  @Input() databaseId: number | null = null
   sqlQuery: string = '';
   result: any = null;
   error: string = '';
@@ -41,6 +41,10 @@ export class SqlRunnerComponent {
     }
     if (this.task?.database) {
       payload.database = this.task.database;
+    }
+    // Wenn eine eigene Datenbank ausgewählt wurde, überschreibe das Feld
+    if (this.databaseId) {
+      payload.database = this.databaseId;
     }
 
     this.http.post('http://localhost:3000/sql/execute', payload).subscribe({

@@ -123,14 +123,24 @@ export class DatabaseService {
    */
   async buildDbUrl(dbId: string): Promise<string> {
     const baseUrl = process.env.DATABASE_URL || '';
-    // Hole die Datenbank-Infos aus ImportedDatabase
-    const importedDb = await this.prisma.importedDatabase.findUnique({ where: { id: Number(dbId) } });
-    if (!importedDb) {
-      throw new Error('ImportedDatabase nicht gefunden');
+
+    // 1. Zuerst nach importierter DB suchen
+    let importedDb = await this.prisma.importedDatabase.findUnique({ where: { id: Number(dbId) } });
+    if (importedDb) {
+      const safeName = sanitizeDbName(importedDb.name);
+      const fullDbName = `imported_${safeName}_${importedDb.id}`;
+      return baseUrl.replace(/(postgres(?:ql)?:\/\/.*?:.*?@.*?:\d+\/)([^?]+)/, `$1${fullDbName}`);
     }
-    const safeName = sanitizeDbName(importedDb.name);
-    const fullDbName = `imported_${safeName}_${importedDb.id}`;
-    return baseUrl.replace(/(postgres(?:ql)?:\/\/.*?:.*?@.*?:\d+\/)([^?]+)/, `$1${fullDbName}`);
+
+    // 2. Dann nach eigener (custom) DB suchen
+    let customDb = await this.prisma.customDatabase.findUnique({ where: { id: Number(dbId) } });
+    if (customDb) {
+      const safeName = sanitizeDbName(customDb.name);
+      const fullDbName = `custom_${safeName}_${customDb.id}`;
+      return baseUrl.replace(/(postgres(?:ql)?:\/\/.*?:.*?@.*?:\d+\/)([^?]+)/, `$1${fullDbName}`);
+    }
+
+    throw new Error('Datenbank nicht gefunden');
   }
 
   // FUNKTION MUSS AUF KOREKKTHEIT ÜBERPRÜFT WERDEN    Holt die Vorlage-Datenbank einer Aufgabe aus der Datenbank (Task.database)       auf Vorlagen DB werden keine Queries ausgeführt     

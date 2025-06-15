@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, Get } from '@nestjs/common';
+import { Controller, Post, Body, Req, Get, Delete, Param } from '@nestjs/common';
 import { CustomDatabaseService } from './custom-database.service';
 import { CreateCustomDatabaseDto } from './dto/create-custom-database.dto';
 
@@ -16,5 +16,10 @@ export class CustomDatabaseController {
   @Get()
   async findAll() {
     return this.service.findAll();
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    return this.service.remove(Number(id));
   }
 }
